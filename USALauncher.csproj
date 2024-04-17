@@ -34,9 +34,6 @@
     <Content Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-	<Reference Include="ByteSize">
-		<HintPath>Libraries\ByteSize.dll</HintPath>
-	</Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
