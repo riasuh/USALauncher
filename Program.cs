@@ -38,13 +38,13 @@ namespace USALauncher
                 try
                 {
                     webClient.Headers.Add("user-agent", "Only a test!");
-                    string url = "https://raw.githubusercontent.com/riasuh/launcherv2test/main/launcherversion.txt?rand=" + Guid.NewGuid();
+                    string url = "https://download.usa-life.net/launcherversion.txt?rand=" + Guid.NewGuid();
                     string text = webClient.DownloadString(url);
 
                     // Überprüfe, ob die heruntergeladene Version von der aktuellen Version abweicht
                     if (text.Trim() != Assembly.GetExecutingAssembly().GetName().Version.ToString())
                     {
-                        DialogResult result = MessageBox.Show("Es ist eine neue Version des USA.LIFE Launchers verfügbar.\n" +
+                        DialogResult result = MessageBox.Show("Es ist eine neue Version des USA LIFE Launchers verfügbar.\n" +
                             "Aktuell installiert: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\n" +
                             "Aktuellste Version: " + text.Trim() + "\n" +
                             "Möchten Sie jetzt aktualisieren?", "Neue Version verfügbar!", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
@@ -71,7 +71,7 @@ namespace USALauncher
                 using (WebClient webClient = new WebClient())
                 {
                     webClient.Headers.Add("user-agent", "Only a test!");
-                    string latestVersionFileUrl = "https://github.com/riasuh/launcherv2test/blob/main/USALauncher.exe?raw=true";
+                    string latestVersionFileUrl = "https://download.usa-life.net/USALauncher.exe?raw=true";
                     string tempFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "USALauncher.exe");
                     // Setze den Pfad, wo die Datei gespeichert wird
                     webClient.DownloadFile(latestVersionFileUrl, tempFileName);

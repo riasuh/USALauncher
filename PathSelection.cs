@@ -102,7 +102,7 @@ public class PathSelection : Form
 		}
 		else
 		{
-			MessageBox.Show("Du hast keinen validen Pfad ausgewählt, oder hast Arma nicht richtig installiert. Melde dich bei weiteren Problemen im Forum unter https://forum.usa-life.net.", "Pfad nicht gefunden", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+			MessageBox.Show("Du hast keinen validen Pfad ausgewählt, oder hast Arma nicht richtig installiert. Melde dich bei weiteren Problemen im Discord unter https://discord.gg/usaliferpg.", "Pfad nicht gefunden", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 		}
 	}
 

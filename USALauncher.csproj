@@ -34,17 +34,11 @@
     <Content Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ByteSize">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\USA Life Development\USA-Life Launcher\ByteSize.dll</HintPath>
-    </Reference>
-    <Reference Include="AxInterop.WMPLib">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\USA Life Development\USA-Life Launcher\AxInterop.WMPLib.dll</HintPath>
-    </Reference>
+	<Reference Include="ByteSize">
+		<HintPath>Libraries\ByteSize.dll</HintPath>
+	</Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="Interop.WMPLib">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\USA Life Development\USA-Life Launcher\Interop.WMPLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -63,12 +57,5 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ByteSize" Version="2.1.2" />
-    <PackageReference Include="WMPLib" Version="1.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>

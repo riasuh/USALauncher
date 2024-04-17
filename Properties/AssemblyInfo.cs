@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-[assembly: AssemblyTitle("USA.LIFE Launcher")]
-[assembly: AssemblyDescription("Launcher for USA.LIFE ArmA 3 Server")]
+[assembly: AssemblyTitle("USA LIFE Launcher")]
+[assembly: AssemblyDescription("Launcher for USA LIFE ArmA 3 Server")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("milonet Developement")]
 [assembly: AssemblyProduct("USALauncher")]
-[assembly: AssemblyCopyright("Copyright © milo 2023")]
+[assembly: AssemblyCopyright("Copyright © milo 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

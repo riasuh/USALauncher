@@ -32,9 +32,9 @@ public class Mainframe : Form
 
 	public string defaultprofilepath;
 
-	private IPAddress[] addresslist = Dns.GetHostAddresses("85.190.148.62");
+	private IPAddress[] addresslist = Dns.GetHostAddresses("51.195.61.187");
 
-	public ArmA3ServerInfo info = new ArmA3ServerInfo(Dns.GetHostAddresses("85.190.148.62").FirstOrDefault().ToString(), 2303);
+	public ArmA3ServerInfo info = new ArmA3ServerInfo(Dns.GetHostAddresses("51.195.61.187").FirstOrDefault().ToString(), 2303);
 
     private System.Threading.Timer timer;
 
@@ -193,7 +193,7 @@ public class Mainframe : Form
 		InitializeComponent();
 		base.Icon = USALauncher.Properties.Resources.LOGO01_snowwhite_PNG;
 		CenterToScreen();
-		lblVersion.Text = "USA.LIFE Launcher v." + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+		lblVersion.Text = "USA LIFE Launcher v." + Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		armaPath = Settings.Default.armaPath.ToString();
 		if (string.IsNullOrEmpty(armaPath))
 		{
@@ -282,7 +282,7 @@ public class Mainframe : Form
 
 	private void serverUpdatesButton_Click(object sender, EventArgs e)
 	{
-		Process.Start("https://forum.usa-life.net/forum/index.php?board/9-changelogs/");
+		Process.Start("https://discord.gg/usaliferpg");
 	}
 
 	private void steamBtn_Click(object sender, EventArgs e)
@@ -412,7 +412,7 @@ public class Mainframe : Form
 			});
 			this.InvokeEx(delegate(Mainframe f)
 			{
-				f.picLaunch.Text = "USA.LIFE Spielen";
+				f.picLaunch.Text = "USA LIFE Spielen";
 			});
 			timer.Dispose();
 		}, null, 10000, -1);
@@ -874,7 +874,7 @@ public class Mainframe : Form
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(157, 14);
             this.lblVersion.TabIndex = 12;
-            this.lblVersion.Text = "USA.LIFE Launcher v0.0.0.0";
+            this.lblVersion.Text = "USA LIFE Launcher v1.3.0.0";
             // 
             // lblArmaSpieler
             // 
