@@ -121,7 +121,7 @@ public class InfoFenster : Form
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(174, 16);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Copyright © 2023 milonet.";
+            this.label3.Text = "Copyright © 2024 milonet.";
             // 
             // label4
             // 
