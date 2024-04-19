@@ -32,7 +32,7 @@ Der Launcher nutzt `.txt` Dateien, die unter <https://download.usa-life.net> geh
 
 ## Mögliche Weiterentwicklung
 
-Alernativ können die Daten aus unserer Datenbank abgefragt werden. Dazu muss folgende [GraphQL Query](https://graphql.org/) an unseren öffentlichen Endpunkt geschickt werden:
+Alternativ können die Daten aus unserer Datenbank abgefragt werden. Dazu muss folgende [GraphQL Query](https://graphql.org/) an unseren öffentlichen Endpunkt geschickt werden:
 
 GraphQL Endpunkt: <https://hasura.usa-life.net/v1/graphql>
 
