@@ -4,9 +4,9 @@
 
 ## Vorwort
 
-Danke, dass du dir das Repository zu unserem Launcher anschaust. Da sich bei der Ausführung der Windows Defender beschwert haben wir uns dazu entschieden den Quellcode zu veröffentlichen. Bei Bedarf auch selbst gebaut werden. Außerdem geben wir euch so die Möglichkeit, selbst Änderungen vorzunehmen. Bedenke jedoch, dass wir den Launcher nur noch für Arma 3 benutzen werden. Aus diesem Grund wird sich vermutlich auch nicht mehr viel ändern.
+Danke, dass du dir das Repository zu unserem Launcher ansiehst. Da sich bei der Ausführung  Windows Defender beschwert, haben wir uns entschieden, den Quellcode zu veröffentlichen. Bei Bedarf kann der Launcher auch selbst gebaut werden. Außerdem geben wir euch so die Möglichkeit, selbst Änderungen vorzunehmen. Beachte jedoch, dass wir den Launcher nur noch für Arma 3 verwenden werden. Daher wird sich vermutlich auch nicht mehr viel ändern.
 
-## Aufsetzen der Entwicklungsumgebung
+## Einrichten der Entwicklungsumgebung
 
 1. Installiere Visual Studio. Der Code wurde mit VS 2022 getestet.\
   <https://visualstudio.microsoft.com/vs/>
@@ -19,11 +19,11 @@ Danke, dass du dir das Repository zu unserem Launcher anschaust. Da sich bei der
         - ML.NET Model Builder 2022\
           <https://marketplace.visualstudio.com/items?itemName=MLNET.ModelBuilder2022>
 3. Öffne die [./USALauncher.sln](./USALauncher.sln) mit VS 2022.
-4. Build und Debug sollte jetzt out of the box funktionieren.
+4. Build und Debug sollten jetzt „Out-of-the-box“ funktionieren.
 
 ## Links zu Version und Dateien
 
-Der Launcher nutzt `.txt` Dateien, die unter <https://download.usa-life.net> gehostet sind, um die aktuelle Version zu überprüfen. Nachfolgende Dateien werden derzeit immer vom Launcher verwendet, da für die Entwicklung keine separate Umgebung aufgesetzt wurde.
+Der Launcher nutzt `.txt` Dateien, die unter <https://download.usa-life.net> gehostet sind, um die aktuelle Version zu überprüfen. Nachfolgende Dateien werden derzeit immer vom Launcher verwendet, da für die Entwicklung keine separate Umgebung eingerichtet wurde.
 
 - <https://download.usa-life.net/launcherversion.txt>
 - <https://download.usa-life.net/mod.txt>
@@ -32,7 +32,7 @@ Der Launcher nutzt `.txt` Dateien, die unter <https://download.usa-life.net> geh
 
 ## Mögliche Weiterentwicklung
 
-Alternativ können die Daten aus unserer Datenbank abgefragt werden. Dazu muss folgende [GraphQL Query](https://graphql.org/) an unseren öffentlichen Endpunkt geschickt werden:
+Alternativ können die Daten aus unserer Datenbank abgerufen werden. Dazu muss folgende [GraphQL Query](https://graphql.org/) an unseren öffentlichen Endpunkt geschickt werden:
 
 GraphQL Endpunkt: <https://hasura.usa-life.net/v1/graphql>
 
@@ -67,3 +67,7 @@ Als Resultat wird folgendes JSON Object zurückgegeben:
   }
 }
 ```
+## Mitwirkende
+**Milozz** (aka ria/riasuh) - Code\
+**Larry** (aka Tim) - Code/Git\
+**L03ff3l** (aka Loeffel) - Design
