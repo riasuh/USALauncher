@@ -1,8 +1,10 @@
+using SteamQuery;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,12 +14,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using USALauncher.Resources;
-
-using System.Data;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing.Text;
-using SteamQuery;
 
 namespace USALauncher;
 
@@ -43,8 +39,6 @@ public class Mainframe : Form
 
     private IPAddress[] addresslist = Dns.GetHostAddresses("s.usa-life.net");
 
-    public ArmA3ServerInfo info = new ArmA3ServerInfo(Dns.GetHostAddresses("s.usa-life.net").FirstOrDefault().ToString(), 2303);
-
     private System.Threading.Timer timer;
 
     private IContainer components;
@@ -55,15 +49,7 @@ public class Mainframe : Form
 
     private Button btnChangePath;
 
-    private WebBrowser wbChangelog;
-
     private Label lblVersion;
-
-    private Label lblArmaSpieler;
-
-    private System.Windows.Forms.Timer tmrUpdateStats;
-
-    private PictureBoxOpacity picLaunch;
 
     private ComboBox cbProfile;
 
@@ -97,12 +83,6 @@ public class Mainframe : Form
 
     private Button buttontexture;
 
-    private CheckBox cbRadioMod;
-
-    private Label label5;
-
-    private Label label6;
-
     private ToolTip toolTip1;
 
     private ToolTip toolTip2;
@@ -129,6 +109,7 @@ public class Mainframe : Form
     private System.Windows.Forms.Timer updateTimer;
     private Label playersOnlineLabel;
     private PictureBox picGetServerInfo;
+    private PictureBox picPlay;
 
     public object MainFrame { get; private set; }
 
@@ -152,6 +133,7 @@ public class Mainframe : Form
         originalImages.Add(picMinimize, picMinimize.Image);
         originalImages.Add(picInfo, picInfo.Image);
         originalImages.Add(picGetServerInfo, picGetServerInfo.Image);
+        originalImages.Add(picPlay, picPlay.Image);
         // Initialisiere den Timer
         updateTimer = new System.Windows.Forms.Timer();
         updateTimer.Interval = 60000; // 60 Sekunden
@@ -195,17 +177,6 @@ public class Mainframe : Form
     {
         WriteDownToLog(DateTime.Now.ToString("HH:mm:ss") + " - Unhandled EXC -> " + e.ExceptionObject.ToString());
     }
-
-    /*private void WriteDownToLog(string message)
-	{
-		if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Logs"))
-		{
-			Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Logs");
-		}
-		StreamWriter streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "Logs\\ErrorLog-" + DateTime.Now.ToString("dd-MM-yyyy"), append: true);
-		streamWriter.WriteLine(message);
-		streamWriter.Close();
-	}*/
 
     private static Mutex logMutex = new Mutex(); // Globale Mutex-Variable
 
@@ -271,16 +242,8 @@ public class Mainframe : Form
         cbHyper.Checked = Settings.Default.enableHT;
         cbIntro.Checked = Settings.Default.skipIntro;
         cbnologs.Checked = Settings.Default.noLogs;
-        /* old Arma3ServerInfo code 
-          new Thread((ThreadStart)delegate
-        {
-            updateStats(null, null);
-        }).Start();
-        tmrUpdateStats.Start();
-        */
-        wbChangelog.DocumentTitleChanged += AdaptChangelog;
 
-        
+
     }
 
     [DllImport("user32.dll")]
@@ -309,38 +272,37 @@ public class Mainframe : Form
 
     private void picTeamspeak_Click(object sender, EventArgs e)
     {
-        Process.Start("t" +
-            "s3server://ts.usa-life.net");
+        Process.Start(new ProcessStartInfo("ts3server://ts.usa-life.net") { UseShellExecute = true });
     }
 
     private void picRegeln_Click(object sender, EventArgs e)
     {
-        Process.Start("https://usa-life.net/regeln");
+        Process.Start(new ProcessStartInfo("https://usa-life.net/regeln") { UseShellExecute = true });
     }
 
     private void picHomepage_Click(object sender, EventArgs e)
     {
-        Process.Start("https://usa-life.net/");
+        Process.Start(new ProcessStartInfo("https://usa-life.net/") { UseShellExecute = true });
     }
 
     private void picForum_Click(object sender, EventArgs e)
     {
-        Process.Start("https://forum.usa-life.net/");
+        Process.Start(new ProcessStartInfo("https://forum.usa-life.net/") { UseShellExecute = true });
     }
 
     private void serverUpdatesButton_Click(object sender, EventArgs e)
     {
-        Process.Start("https://discord.gg/usaliferpg");
+        Process.Start(new ProcessStartInfo("https://discord.gg/usaliferpg") { UseShellExecute = true });
     }
 
     private void picSteam_Click(object sender, EventArgs e)
     {
-        Process.Start("https://steamcommunity.com/groups/usaliferpg");
+        Process.Start(new ProcessStartInfo("https://steamcommunity.com/groups/usaliferpg") { UseShellExecute = true });
     }
 
     private void facebookBtn_Click(object sender, EventArgs e)
     {
-        Process.Start("https://www.facebook.com/usaliferpg/");
+        Process.Start(new ProcessStartInfo("https://www.facebook.com/usaliferpg/") { UseShellExecute = true });
     }
 
     private void btnChangePath_Click(object sender, EventArgs e)
@@ -350,82 +312,75 @@ public class Mainframe : Form
         lblInstallationPath.Text = armaPath;
     }
 
-    private void updateStats(object sender, EventArgs e)
-    {
-        info.Update();
-
-        this.InvokeEx(delegate (Mainframe f)
-        {
-            if (info.ServerInfo == null)
-            {
-                f.lblArmaSpieler.Text = "Spieler Online: 0/0";
-            }
-            else
-            {
-                f.lblArmaSpieler.Text = "Spieler Online: " + info.ServerInfo.NumPlayers + "/" + info.ServerInfo.MaxPlayers;
-            }
-        });
-    }
-
 
 
 
     private void btnLaunch_Click(object sender, EventArgs e)
     {
         Updaterplaybutton();
-        using WebClient webClient = new WebClient();
-        webClient.Headers.Add("user-agent", "Only a test!");
-        string text = webClient.DownloadString(missionDownloadUri);
-        text = text.Split(new string[1] { "\n" }, StringSplitOptions.None)[0];
-        string text2 = text.Split('/').Last();
-        _ = armaPath + "\\@USALifeMod";
-        if (!File.Exists(localPath + "\\" + text2))
+        using (WebClient webClient = new WebClient())
         {
-            new DownloadForm(text, localPath, armaPath, this).ShowDialog();
-            return;
+            webClient.Headers.Add("user-agent", "Only a test!");
+            string text = webClient.DownloadString(missionDownloadUri);
+            text = text.Split(new string[1] { "\n" }, StringSplitOptions.None)[0];
+            string text2 = text.Split('/').Last();
+            _ = armaPath + "\\@USALifeMod";
+            if (!File.Exists(localPath + "\\" + text2))
+            {
+                new DownloadForm(text, localPath, armaPath, this).ShowDialog();
+                return;
+            }
+            toolTipLaunch.Show("Arma 3 wird gestartet...", this, Cursor.Position.X - base.Location.X, Cursor.Position.Y - base.Location.Y, 100000);
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            processStartInfo.FileName = Path.GetFileName(armaPath + "\\arma3launcher.exe");
+            processStartInfo.WorkingDirectory = Path.GetDirectoryName(armaPath + "\\arma3launcher.exe");
+            processStartInfo.Arguments = " -noLauncher -connect=s.usa-life.net -useBE -mod=@USALifeMod";
+            if (Settings.Default.profile != null && Settings.Default.profile != "")
+            {
+                UserProfile userProfile = new UserProfile(Settings.Default.profile);
+                processStartInfo.Arguments += $" \"-name={userProfile}\"";
+            }
+            if (cbSplash.Checked)
+            {
+                processStartInfo.Arguments += " -nosplash";
+            }
+            if (cbWindow.Checked)
+            {
+                processStartInfo.Arguments += " -window";
+            }
+            if (cbHyper.Checked)
+            {
+                processStartInfo.Arguments += " -enableHT";
+            }
+            if (cbIntro.Checked)
+            {
+                processStartInfo.Arguments += " -skipIntro";
+            }
+            if (cbnologs.Checked)
+            {
+                processStartInfo.Arguments += " -noLogs";
+            }
+            if (nudVram.Value != 0m)
+            {
+                processStartInfo.Arguments += $" -maxVRAM={nudVram.Value}";
+            }
+            if (txtParams.Text.Length != 0)
+            {
+                processStartInfo.Arguments += $" {txtParams.Text}";
+            }
+            processStartInfo.UseShellExecute = true; // Setze UseShellExecute auf true
+            try
+            {
+                Process.Start(processStartInfo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Starten von Arma 3: " + ex.Message);
+            }
         }
-        toolTipLaunch.Show("Arma 3 wird gestartet...", this, Cursor.Position.X - base.Location.X, Cursor.Position.Y - base.Location.Y, 100000);
-        ProcessStartInfo processStartInfo = new ProcessStartInfo();
-        processStartInfo.FileName = Path.GetFileName(armaPath + "\\arma3launcher.exe");
-        processStartInfo.WorkingDirectory = Path.GetDirectoryName(armaPath + "\\arma3launcher.exe");
-        processStartInfo.Arguments = " -noLauncher -connect=s.usa-life.net -useBE -mod=@USALifeMod";
-        if (Settings.Default.profile != null && Settings.Default.profile != "")
-        {
-            UserProfile userProfile = new UserProfile(Settings.Default.profile);
-            ProcessStartInfo processStartInfo2 = processStartInfo;
-            processStartInfo2.Arguments = string.Concat(processStartInfo2.Arguments, " \"-name=", userProfile, "\"");
-        }
-        if (cbSplash.Checked)
-        {
-            processStartInfo.Arguments += " -nosplash";
-        }
-        if (cbWindow.Checked)
-        {
-            processStartInfo.Arguments += " -window";
-        }
-        if (cbHyper.Checked)
-        {
-            processStartInfo.Arguments += " -enableHT";
-        }
-        if (cbIntro.Checked)
-        {
-            processStartInfo.Arguments += " -skipIntro";
-        }
-        if (cbnologs.Checked)
-        {
-            processStartInfo.Arguments += " -noLogs";
-        }
-        if (nudVram.Value != 0m)
-        {
-            processStartInfo.Arguments = processStartInfo.Arguments + " -maxVRAM=" + nudVram.Value;
-        }
-        if (txtParams.Text.Length != 0)
-        {
-            processStartInfo.Arguments = processStartInfo.Arguments + " " + txtParams.Text;
-        }
-        Process.Start(processStartInfo);
         disableLaunchButton();
     }
+
 
     private void btnLaunch_Clickfake()
     {
@@ -446,21 +401,21 @@ public class Mainframe : Form
     {
         this.InvokeEx(delegate (Mainframe f)
         {
-            f.picLaunch.Enabled = false;
+            f.picPlay.Enabled = false;
         });
         this.InvokeEx(delegate (Mainframe f)
         {
-            f.picLaunch.Text = "Starte ArmA...";
+            f.picPlay.Text = "Starte ArmA...";
         });
         timer = new System.Threading.Timer(delegate
         {
             this.InvokeEx(delegate (Mainframe f)
             {
-                f.picLaunch.Enabled = true;
+                f.picPlay.Enabled = true;
             });
             this.InvokeEx(delegate (Mainframe f)
             {
-                f.picLaunch.Text = "USA LIFE Spielen";
+                f.picPlay.Text = "USA LIFE Spielen";
             });
             timer.Dispose();
         }, null, 10000, -1);
@@ -468,11 +423,7 @@ public class Mainframe : Form
 
     private void MouseHoverEnter(object sender, EventArgs e)
     {
-        if (sender is PictureBoxOpacity)
-        {
-            ((PictureBoxOpacity)sender).Opacity = 0.9f;
-        }
-        else if (sender is PictureBox)
+        if (sender is PictureBox)
         {
             PictureBox pictureBox = (PictureBox)sender;
 
@@ -481,7 +432,8 @@ public class Mainframe : Form
             {
                 // Setze das rote Bild für den Close-Button
                 pictureBox.Image = Properties.Resources.picCloseRed_Image;
-            } else if (pictureBox == picMinimize)
+            }
+            else if (pictureBox == picMinimize)
             {
                 pictureBox.Image = Properties.Resources.picMinimizeGreen_Image;
             }
@@ -498,11 +450,7 @@ public class Mainframe : Form
     }
     private void MouseHoverLeave(object sender, EventArgs e)
     {
-        if (sender is PictureBoxOpacity)
-        {
-            ((PictureBoxOpacity)sender).Opacity = 1f;
-        }
-        else if (sender is PictureBox)
+        if (sender is PictureBox)
         {
             PictureBox pictureBox = (PictureBox)sender;
 
@@ -731,12 +679,6 @@ public class Mainframe : Form
             download2.ShowDialog();
         }
     }
-
-    private void AdaptChangelog(object sender, CancelEventArgs e)
-    {
-    }
-
-
     private void cbHyper_CheckedChanged(object sender, EventArgs e)
     {
     }
@@ -798,19 +740,19 @@ public class Mainframe : Form
 
     private void picInstagram_Click(object sender, EventArgs e)
     {
-        Process.Start("https://www.instagram.com/usaliferpg/");
+        Process.Start(new ProcessStartInfo("https://www.instagram.com/usaliferpg/") { UseShellExecute = true });
     }
     private void picYoutube_Click(object sender, EventArgs e)
     {
-        Process.Start("https://www.youtube.com/@usaliferpg");
+        Process.Start(new ProcessStartInfo("https://www.youtube.com/@usaliferpg") { UseShellExecute = true });
     }
     private void picStatsImage_Click(object sender, EventArgs e)
     {
-        Process.Start("https://www.battlemetrics.com/servers/arma3");
+        Process.Start(new ProcessStartInfo("https://www.battlemetrics.com/servers/arma3") { UseShellExecute = true });
     }
     private void picDiscord_Click(object sender, EventArgs e)
     {
-        Process.Start("https://discord.gg/usaliferpg");
+        Process.Start(new ProcessStartInfo("https://discord.gg/usaliferpg") { UseShellExecute = true });
     }
     private void picClose_Click(object sender, EventArgs e)
     {
@@ -874,7 +816,7 @@ public class Mainframe : Form
 
         // Erstelle die Font-Instanz mit der benutzerdefinierten Schriftart und -größe
         myFont = new Font(fonts.Families[0], 11.0F);
-        myFontlblArmaSpieler = new Font(fonts.Families[0], 17.0F);
+        myFontlblArmaSpieler = new Font(fonts.Families[0], 19.0F);
 
         // Setze die Schriftart für das Label
         lblPathDescription.Font = myFont;
@@ -896,761 +838,720 @@ public class Mainframe : Form
 
     private void InitializeComponent()
     {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mainframe));
-            this.lblPathDescription = new System.Windows.Forms.Label();
-            this.lblInstallationPath = new System.Windows.Forms.Label();
-            this.btnChangePath = new System.Windows.Forms.Button();
-            this.wbChangelog = new System.Windows.Forms.WebBrowser();
-            this.lblVersion = new System.Windows.Forms.Label();
-            this.lblArmaSpieler = new System.Windows.Forms.Label();
-            this.tmrUpdateStats = new System.Windows.Forms.Timer(this.components);
-            this.cbProfile = new System.Windows.Forms.ComboBox();
-            this.lblProfil = new System.Windows.Forms.Label();
-            this.cbSplash = new System.Windows.Forms.CheckBox();
-            this.cbWindow = new System.Windows.Forms.CheckBox();
-            this.lblMaxVram = new System.Windows.Forms.Label();
-            this.nudVram = new System.Windows.Forms.NumericUpDown();
-            this.txtParams = new System.Windows.Forms.TextBox();
-            this.lblParams = new System.Windows.Forms.Label();
-            this.lblProfileDescription = new System.Windows.Forms.Label();
-            this.lblprofilePath = new System.Windows.Forms.Label();
-            this.btnProfilePath = new System.Windows.Forms.Button();
-            this.cbHyper = new System.Windows.Forms.CheckBox();
-            this.cbIntro = new System.Windows.Forms.CheckBox();
-            this.cbnologs = new System.Windows.Forms.CheckBox();
-            this.fbdprofilePath = new System.Windows.Forms.FolderBrowserDialog();
-            this.buttontexture = new System.Windows.Forms.Button();
-            this.cbRadioMod = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.picInfo = new System.Windows.Forms.PictureBox();
-            this.picInstagram = new System.Windows.Forms.PictureBox();
-            this.picStatsImage = new System.Windows.Forms.PictureBox();
-            this.picSteam = new System.Windows.Forms.PictureBox();
-            this.picYoutube = new System.Windows.Forms.PictureBox();
-            this.picClose = new System.Windows.Forms.PictureBox();
-            this.picReload = new System.Windows.Forms.PictureBox();
-            this.picMinimize = new System.Windows.Forms.PictureBox();
-            this.picGetServerInfo = new System.Windows.Forms.PictureBox();
-            this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
-            this.toolTipLaunch = new System.Windows.Forms.ToolTip(this.components);
-            this.picBanner = new System.Windows.Forms.PictureBox();
-            this.picDiscord = new System.Windows.Forms.PictureBox();
-            this.picUpdates = new System.Windows.Forms.PictureBox();
-            this.picHomepage = new System.Windows.Forms.PictureBox();
-            this.picRegeln = new System.Windows.Forms.PictureBox();
-            this.picTeamspeak = new System.Windows.Forms.PictureBox();
-            this.picSpielerOnline = new System.Windows.Forms.PictureBox();
-            this.lblMaxVram2 = new System.Windows.Forms.Label();
-            this.playersOnlineLabel = new System.Windows.Forms.Label();
-            this.picLaunch = new USALauncher.PictureBoxOpacity();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVram)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picInfo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picInstagram)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picStatsImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSteam)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picYoutube)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picClose)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picReload)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picMinimize)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picGetServerInfo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBanner)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picDiscord)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picUpdates)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picHomepage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picRegeln)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picTeamspeak)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSpielerOnline)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLaunch)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // lblPathDescription
-            // 
-            this.lblPathDescription.AutoSize = true;
-            this.lblPathDescription.BackColor = System.Drawing.Color.Transparent;
-            this.lblPathDescription.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.lblPathDescription.ForeColor = System.Drawing.Color.White;
-            this.lblPathDescription.Location = new System.Drawing.Point(12, 91);
-            this.lblPathDescription.Name = "lblPathDescription";
-            this.lblPathDescription.Size = new System.Drawing.Size(131, 17);
-            this.lblPathDescription.TabIndex = 8;
-            this.lblPathDescription.Text = "Arma 3 Installation:";
-            // 
-            // lblInstallationPath
-            // 
-            this.lblInstallationPath.AutoSize = true;
-            this.lblInstallationPath.BackColor = System.Drawing.Color.Transparent;
-            this.lblInstallationPath.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.lblInstallationPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(197)))), ((int)(((byte)(94)))));
-            this.lblInstallationPath.Location = new System.Drawing.Point(193, 97);
-            this.lblInstallationPath.Name = "lblInstallationPath";
-            this.lblInstallationPath.Size = new System.Drawing.Size(77, 17);
-            this.lblInstallationPath.TabIndex = 9;
-            this.lblInstallationPath.Text = "UNKNOWN";
-            // 
-            // btnChangePath
-            // 
-            this.btnChangePath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(42)))));
-            this.btnChangePath.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnChangePath.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-            this.btnChangePath.FlatAppearance.BorderSize = 2;
-            this.btnChangePath.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnChangePath.Font = new System.Drawing.Font("Bahnschrift SemiLight", 8.5F);
-            this.btnChangePath.ForeColor = System.Drawing.Color.White;
-            this.btnChangePath.Location = new System.Drawing.Point(605, 95);
-            this.btnChangePath.Name = "btnChangePath";
-            this.btnChangePath.Size = new System.Drawing.Size(110, 23);
-            this.btnChangePath.TabIndex = 10;
-            this.btnChangePath.Text = "Pfad ändern";
-            this.btnChangePath.UseVisualStyleBackColor = false;
-            this.btnChangePath.Click += new System.EventHandler(this.btnChangePath_Click);
-            // 
-            // wbChangelog
-            // 
-            this.wbChangelog.Location = new System.Drawing.Point(286, 374);
-            this.wbChangelog.MinimumSize = new System.Drawing.Size(20, 20);
-            this.wbChangelog.Name = "wbChangelog";
-            this.wbChangelog.Size = new System.Drawing.Size(44, 20);
-            this.wbChangelog.TabIndex = 11;
-            this.wbChangelog.Url = new System.Uri("https://forum.usa-life.net/forum/index.php?board/9-server-updates/", System.UriKind.Absolute);
-            this.wbChangelog.Visible = false;
-            this.wbChangelog.NewWindow += new System.ComponentModel.CancelEventHandler(this.AdaptChangelog);
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
-            this.lblVersion.Font = new System.Drawing.Font("Bahnschrift SemiLight", 8.7F);
-            this.lblVersion.ForeColor = System.Drawing.Color.White;
-            this.lblVersion.Location = new System.Drawing.Point(733, 484);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(153, 14);
-            this.lblVersion.TabIndex = 12;
-            this.lblVersion.Text = "USA LIFE Launcher v1.3.0.0";
-            // 
-            // lblArmaSpieler
-            // 
-            this.lblArmaSpieler.AutoSize = true;
-            this.lblArmaSpieler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(42)))));
-            this.lblArmaSpieler.Font = new System.Drawing.Font("Bahnschrift Light", 11F);
-            this.lblArmaSpieler.ForeColor = System.Drawing.Color.White;
-            this.lblArmaSpieler.Location = new System.Drawing.Point(591, 332);
-            this.lblArmaSpieler.Name = "lblArmaSpieler";
-            this.lblArmaSpieler.Size = new System.Drawing.Size(203, 18);
-            this.lblArmaSpieler.TabIndex = 13;
-            this.lblArmaSpieler.Text = "Spieler Online:    /? (obsolete)";
-            this.lblArmaSpieler.Visible = false;
-            // 
-            // cbProfile
-            // 
-            this.cbProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(42)))));
-            this.cbProfile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbProfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cbProfile.Font = new System.Drawing.Font("Bahnschrift SemiLight", 9F);
-            this.cbProfile.ForeColor = System.Drawing.SystemColors.Window;
-            this.cbProfile.FormattingEnabled = true;
-            this.cbProfile.Location = new System.Drawing.Point(196, 169);
-            this.cbProfile.Name = "cbProfile";
-            this.cbProfile.Size = new System.Drawing.Size(279, 22);
-            this.cbProfile.TabIndex = 16;
-            this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
-            // 
-            // lblProfil
-            // 
-            this.lblProfil.AutoSize = true;
-            this.lblProfil.BackColor = System.Drawing.Color.Transparent;
-            this.lblProfil.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.lblProfil.ForeColor = System.Drawing.Color.White;
-            this.lblProfil.Location = new System.Drawing.Point(12, 166);
-            this.lblProfil.Name = "lblProfil";
-            this.lblProfil.Size = new System.Drawing.Size(46, 17);
-            this.lblProfil.TabIndex = 17;
-            this.lblProfil.Text = "Profil:";
-            // 
-            // cbSplash
-            // 
-            this.cbSplash.AutoSize = true;
-            this.cbSplash.BackColor = System.Drawing.Color.Transparent;
-            this.cbSplash.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbSplash.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.cbSplash.ForeColor = System.Drawing.Color.White;
-            this.cbSplash.Location = new System.Drawing.Point(585, 182);
-            this.cbSplash.Name = "cbSplash";
-            this.cbSplash.Size = new System.Drawing.Size(145, 21);
-            this.cbSplash.TabIndex = 18;
-            this.cbSplash.Text = "kein Splashscreen";
-            this.cbSplash.UseVisualStyleBackColor = false;
-            this.cbSplash.CheckedChanged += new System.EventHandler(this.cbSplash_CheckedChanged);
-            this.cbSplash.Click += new System.EventHandler(this.cbSplash_Click);
-            // 
-            // cbWindow
-            // 
-            this.cbWindow.AutoSize = true;
-            this.cbWindow.BackColor = System.Drawing.Color.Transparent;
-            this.cbWindow.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbWindow.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.cbWindow.ForeColor = System.Drawing.Color.White;
-            this.cbWindow.Location = new System.Drawing.Point(585, 208);
-            this.cbWindow.Name = "cbWindow";
-            this.cbWindow.Size = new System.Drawing.Size(120, 21);
-            this.cbWindow.TabIndex = 19;
-            this.cbWindow.Text = "Fenstermodus";
-            this.cbWindow.UseVisualStyleBackColor = false;
-            this.cbWindow.Click += new System.EventHandler(this.cbWindow_Click);
-            // 
-            // lblMaxVram
-            // 
-            this.lblMaxVram.AutoSize = true;
-            this.lblMaxVram.BackColor = System.Drawing.Color.Transparent;
-            this.lblMaxVram.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.lblMaxVram.ForeColor = System.Drawing.Color.White;
-            this.lblMaxVram.Location = new System.Drawing.Point(12, 196);
-            this.lblMaxVram.Name = "lblMaxVram";
-            this.lblMaxVram.Size = new System.Drawing.Size(127, 17);
-            this.lblMaxVram.TabIndex = 21;
-            this.lblMaxVram.Text = "Max. VRAM (in MB)";
-            // 
-            // nudVram
-            // 
-            this.nudVram.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(42)))));
-            this.nudVram.Font = new System.Drawing.Font("Bahnschrift SemiLight", 9F);
-            this.nudVram.ForeColor = System.Drawing.Color.White;
-            this.nudVram.Location = new System.Drawing.Point(196, 200);
-            this.nudVram.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudVram.Name = "nudVram";
-            this.nudVram.Size = new System.Drawing.Size(91, 22);
-            this.nudVram.TabIndex = 22;
-            this.nudVram.ValueChanged += new System.EventHandler(this.nudVram_ValueChanged);
-            // 
-            // txtParams
-            // 
-            this.txtParams.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(42)))));
-            this.txtParams.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.txtParams.ForeColor = System.Drawing.SystemColors.Window;
-            this.txtParams.Location = new System.Drawing.Point(15, 258);
-            this.txtParams.Multiline = true;
-            this.txtParams.Name = "txtParams";
-            this.txtParams.Size = new System.Drawing.Size(357, 71);
-            this.txtParams.TabIndex = 23;
-            this.txtParams.TextChanged += new System.EventHandler(this.txtParams_TextChanged);
-            // 
-            // lblParams
-            // 
-            this.lblParams.AutoSize = true;
-            this.lblParams.BackColor = System.Drawing.Color.Transparent;
-            this.lblParams.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.lblParams.ForeColor = System.Drawing.Color.White;
-            this.lblParams.Location = new System.Drawing.Point(12, 232);
-            this.lblParams.Name = "lblParams";
-            this.lblParams.Size = new System.Drawing.Size(338, 17);
-            this.lblParams.TabIndex = 24;
-            this.lblParams.Text = "Andere Parameter (z.B. -cpuCount=<Anzahl Cores>)";
-            // 
-            // lblProfileDescription
-            // 
-            this.lblProfileDescription.AutoSize = true;
-            this.lblProfileDescription.BackColor = System.Drawing.Color.Transparent;
-            this.lblProfileDescription.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.lblProfileDescription.ForeColor = System.Drawing.Color.White;
-            this.lblProfileDescription.Location = new System.Drawing.Point(12, 124);
-            this.lblProfileDescription.Name = "lblProfileDescription";
-            this.lblProfileDescription.Size = new System.Drawing.Size(122, 17);
-            this.lblProfileDescription.TabIndex = 25;
-            this.lblProfileDescription.Text = "Arma 3 Profilpfad:";
-            // 
-            // lblprofilePath
-            // 
-            this.lblprofilePath.BackColor = System.Drawing.Color.Transparent;
-            this.lblprofilePath.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.lblprofilePath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(197)))), ((int)(((byte)(94)))));
-            this.lblprofilePath.Location = new System.Drawing.Point(193, 130);
-            this.lblprofilePath.Name = "lblprofilePath";
-            this.lblprofilePath.Size = new System.Drawing.Size(406, 36);
-            this.lblprofilePath.TabIndex = 27;
-            this.lblprofilePath.Text = "- coming soon -";
-            // 
-            // btnProfilePath
-            // 
-            this.btnProfilePath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(42)))));
-            this.btnProfilePath.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnProfilePath.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnProfilePath.Font = new System.Drawing.Font("Bahnschrift SemiLight", 8.5F);
-            this.btnProfilePath.ForeColor = System.Drawing.Color.White;
-            this.btnProfilePath.Location = new System.Drawing.Point(605, 128);
-            this.btnProfilePath.Name = "btnProfilePath";
-            this.btnProfilePath.Size = new System.Drawing.Size(110, 23);
-            this.btnProfilePath.TabIndex = 28;
-            this.btnProfilePath.Text = "Pfad ändern";
-            this.btnProfilePath.UseVisualStyleBackColor = false;
-            this.btnProfilePath.Click += new System.EventHandler(this.btnProfilePath_Click);
-            // 
-            // cbHyper
-            // 
-            this.cbHyper.AutoSize = true;
-            this.cbHyper.BackColor = System.Drawing.Color.Transparent;
-            this.cbHyper.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbHyper.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.cbHyper.ForeColor = System.Drawing.Color.White;
-            this.cbHyper.Location = new System.Drawing.Point(585, 234);
-            this.cbHyper.Name = "cbHyper";
-            this.cbHyper.Size = new System.Drawing.Size(136, 21);
-            this.cbHyper.TabIndex = 29;
-            this.cbHyper.Text = "Hyper-Threading";
-            this.cbHyper.UseVisualStyleBackColor = false;
-            this.cbHyper.CheckedChanged += new System.EventHandler(this.cbHyper_CheckedChanged);
-            this.cbHyper.Click += new System.EventHandler(this.cbHyper_Click);
-            // 
-            // cbIntro
-            // 
-            this.cbIntro.AutoSize = true;
-            this.cbIntro.BackColor = System.Drawing.Color.Transparent;
-            this.cbIntro.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbIntro.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.cbIntro.ForeColor = System.Drawing.Color.White;
-            this.cbIntro.Location = new System.Drawing.Point(585, 260);
-            this.cbIntro.Name = "cbIntro";
-            this.cbIntro.Size = new System.Drawing.Size(149, 21);
-            this.cbIntro.TabIndex = 30;
-            this.cbIntro.Text = "Intro überspringen";
-            this.cbIntro.UseVisualStyleBackColor = false;
-            this.cbIntro.Click += new System.EventHandler(this.cbIntro_Click);
-            // 
-            // cbnologs
-            // 
-            this.cbnologs.AutoSize = true;
-            this.cbnologs.BackColor = System.Drawing.Color.Transparent;
-            this.cbnologs.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbnologs.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.cbnologs.ForeColor = System.Drawing.Color.White;
-            this.cbnologs.Location = new System.Drawing.Point(585, 285);
-            this.cbnologs.Name = "cbnologs";
-            this.cbnologs.Size = new System.Drawing.Size(97, 21);
-            this.cbnologs.TabIndex = 31;
-            this.cbnologs.Text = "keine Logs";
-            this.cbnologs.UseVisualStyleBackColor = false;
-            this.cbnologs.Click += new System.EventHandler(this.cbnologs_Click);
-            // 
-            // buttontexture
-            // 
-            this.buttontexture.Location = new System.Drawing.Point(286, 345);
-            this.buttontexture.Name = "buttontexture";
-            this.buttontexture.Size = new System.Drawing.Size(44, 23);
-            this.buttontexture.TabIndex = 38;
-            this.buttontexture.Text = "Textureupdate";
-            this.buttontexture.UseVisualStyleBackColor = true;
-            this.buttontexture.Visible = false;
-            this.buttontexture.Click += new System.EventHandler(this.buttontexture_Click);
-            // 
-            // cbRadioMod
-            // 
-            this.cbRadioMod.AutoSize = true;
-            this.cbRadioMod.BackColor = System.Drawing.Color.Transparent;
-            this.cbRadioMod.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbRadioMod.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbRadioMod.ForeColor = System.Drawing.Color.White;
-            this.cbRadioMod.Location = new System.Drawing.Point(594, 353);
-            this.cbRadioMod.Name = "cbRadioMod";
-            this.cbRadioMod.Size = new System.Drawing.Size(15, 14);
-            this.cbRadioMod.TabIndex = 39;
-            this.cbRadioMod.UseVisualStyleBackColor = false;
-            this.cbRadioMod.Visible = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(615, 351);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(106, 17);
-            this.label5.TabIndex = 40;
-            this.label5.Text = "USA Radio Mod";
-            this.label5.Visible = false;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(635, 368);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(86, 17);
-            this.label6.TabIndex = 41;
-            this.label6.Text = "verwenden?";
-            this.label6.Visible = false;
-            // 
-            // picInfo
-            // 
-            this.picInfo.BackColor = System.Drawing.Color.Transparent;
-            this.picInfo.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picInfo.Image = global::USALauncher.Properties.Resources.picInfo_Image;
-            this.picInfo.Location = new System.Drawing.Point(819, 12);
-            this.picInfo.Name = "picInfo";
-            this.picInfo.Size = new System.Drawing.Size(16, 16);
-            this.picInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picInfo.TabIndex = 48;
-            this.picInfo.TabStop = false;
-            this.toolTip1.SetToolTip(this.picInfo, "Info´s");
-            this.picInfo.Click += new System.EventHandler(this.picInfo_Click);
-            this.picInfo.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picInfo.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picInstagram
-            // 
-            this.picInstagram.BackColor = System.Drawing.Color.Transparent;
-            this.picInstagram.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picInstagram.Image = global::USALauncher.Properties.Resources.picInstagramGrey_Image;
-            this.picInstagram.Location = new System.Drawing.Point(54, 390);
-            this.picInstagram.Name = "picInstagram";
-            this.picInstagram.Size = new System.Drawing.Size(33, 33);
-            this.picInstagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picInstagram.TabIndex = 49;
-            this.picInstagram.TabStop = false;
-            this.toolTip1.SetToolTip(this.picInstagram, "Folge uns auf Instagram!");
-            this.picInstagram.Click += new System.EventHandler(this.picInstagram_Click);
-            this.picInstagram.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picInstagram.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picStatsImage
-            // 
-            this.picStatsImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(42)))));
-            this.picStatsImage.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picStatsImage.Image = global::USALauncher.Properties.Resources.picStatistic_Image;
-            this.picStatsImage.Location = new System.Drawing.Point(21, 439);
-            this.picStatsImage.Name = "picStatsImage";
-            this.picStatsImage.Size = new System.Drawing.Size(30, 30);
-            this.picStatsImage.TabIndex = 47;
-            this.picStatsImage.TabStop = false;
-            this.toolTip1.SetToolTip(this.picStatsImage, "Server Statistik");
-            this.picStatsImage.Click += new System.EventHandler(this.picStatsImage_Click);
-            // 
-            // picSteam
-            // 
-            this.picSteam.BackColor = System.Drawing.Color.Transparent;
-            this.picSteam.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picSteam.Image = global::USALauncher.Properties.Resources.picSteamGrey_Image;
-            this.picSteam.Location = new System.Drawing.Point(15, 390);
-            this.picSteam.Name = "picSteam";
-            this.picSteam.Size = new System.Drawing.Size(33, 33);
-            this.picSteam.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picSteam.TabIndex = 57;
-            this.picSteam.TabStop = false;
-            this.toolTip1.SetToolTip(this.picSteam, "Trete unserer Steam Gruppe bei!");
-            this.picSteam.Click += new System.EventHandler(this.picSteam_Click);
-            this.picSteam.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picSteam.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picYoutube
-            // 
-            this.picYoutube.BackColor = System.Drawing.Color.Transparent;
-            this.picYoutube.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picYoutube.Image = global::USALauncher.Properties.Resources.picYoutubeGrey_Image;
-            this.picYoutube.Location = new System.Drawing.Point(93, 390);
-            this.picYoutube.Name = "picYoutube";
-            this.picYoutube.Size = new System.Drawing.Size(33, 33);
-            this.picYoutube.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picYoutube.TabIndex = 58;
-            this.picYoutube.TabStop = false;
-            this.toolTip1.SetToolTip(this.picYoutube, "Folge uns auf YouTube!");
-            this.picYoutube.Click += new System.EventHandler(this.picYoutube_Click);
-            this.picYoutube.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picYoutube.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picClose
-            // 
-            this.picClose.BackColor = System.Drawing.Color.Transparent;
-            this.picClose.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picClose.Image = global::USALauncher.Properties.Resources.picCloseWhite_Image;
-            this.picClose.Location = new System.Drawing.Point(871, 12);
-            this.picClose.Name = "picClose";
-            this.picClose.Size = new System.Drawing.Size(18, 18);
-            this.picClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picClose.TabIndex = 59;
-            this.picClose.TabStop = false;
-            this.toolTip1.SetToolTip(this.picClose, "Close");
-            this.picClose.Click += new System.EventHandler(this.picClose_Click);
-            this.picClose.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picClose.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picReload
-            // 
-            this.picReload.BackColor = System.Drawing.Color.Transparent;
-            this.picReload.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picReload.Image = global::USALauncher.Properties.Resources.picReload_Image;
-            this.picReload.Location = new System.Drawing.Point(499, 399);
-            this.picReload.Name = "picReload";
-            this.picReload.Size = new System.Drawing.Size(80, 80);
-            this.picReload.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picReload.TabIndex = 62;
-            this.picReload.TabStop = false;
-            this.toolTip1.SetToolTip(this.picReload, "Nach Mod- und Missionsupdates suchen");
-            this.picReload.Click += new System.EventHandler(this.picReload_Click);
-            this.picReload.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picReload.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picMinimize
-            // 
-            this.picMinimize.BackColor = System.Drawing.Color.Transparent;
-            this.picMinimize.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picMinimize.Image = global::USALauncher.Properties.Resources.picMinimize_Image;
-            this.picMinimize.Location = new System.Drawing.Point(844, 8);
-            this.picMinimize.Name = "picMinimize";
-            this.picMinimize.Size = new System.Drawing.Size(15, 16);
-            this.picMinimize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picMinimize.TabIndex = 63;
-            this.picMinimize.TabStop = false;
-            this.toolTip1.SetToolTip(this.picMinimize, "Minimize");
-            this.picMinimize.Click += new System.EventHandler(this.picMinimize_Click);
-            this.picMinimize.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picMinimize.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picGetServerInfo
-            // 
-            this.picGetServerInfo.BackColor = System.Drawing.Color.Transparent;
-            this.picGetServerInfo.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picGetServerInfo.Image = global::USALauncher.Properties.Resources.picReload_Image;
-            this.picGetServerInfo.Location = new System.Drawing.Point(295, 429);
-            this.picGetServerInfo.Name = "picGetServerInfo";
-            this.picGetServerInfo.Size = new System.Drawing.Size(50, 50);
-            this.picGetServerInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picGetServerInfo.TabIndex = 68;
-            this.picGetServerInfo.TabStop = false;
-            this.toolTip1.SetToolTip(this.picGetServerInfo, "Serverinfos aktualisieren");
-            this.picGetServerInfo.Click += new System.EventHandler(this.picGetServerInfo_Click);
-            this.picGetServerInfo.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picGetServerInfo.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // toolTipLaunch
-            // 
-            this.toolTipLaunch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.toolTipLaunch.ForeColor = System.Drawing.Color.Black;
-            // 
-            // picBanner
-            // 
-            this.picBanner.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
-            this.picBanner.Image = ((System.Drawing.Image)(resources.GetObject("picBanner.Image")));
-            this.picBanner.Location = new System.Drawing.Point(0, -1);
-            this.picBanner.Name = "picBanner";
-            this.picBanner.Size = new System.Drawing.Size(901, 60);
-            this.picBanner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBanner.TabIndex = 3;
-            this.picBanner.TabStop = false;
-            this.picBanner.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picBanner_MouseDown);
-            // 
-            // picDiscord
-            // 
-            this.picDiscord.BackColor = System.Drawing.Color.Transparent;
-            this.picDiscord.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picDiscord.Image = global::USALauncher.Properties.Resources.picDiscord_Image;
-            this.picDiscord.Location = new System.Drawing.Point(749, 89);
-            this.picDiscord.Name = "picDiscord";
-            this.picDiscord.Size = new System.Drawing.Size(134, 40);
-            this.picDiscord.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picDiscord.TabIndex = 51;
-            this.picDiscord.TabStop = false;
-            this.picDiscord.Click += new System.EventHandler(this.picDiscord_Click);
-            this.picDiscord.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picDiscord.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picUpdates
-            // 
-            this.picUpdates.BackColor = System.Drawing.Color.Transparent;
-            this.picUpdates.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picUpdates.Image = global::USALauncher.Properties.Resources.picUpdates_Image;
-            this.picUpdates.Location = new System.Drawing.Point(749, 273);
-            this.picUpdates.Name = "picUpdates";
-            this.picUpdates.Size = new System.Drawing.Size(134, 40);
-            this.picUpdates.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picUpdates.TabIndex = 52;
-            this.picUpdates.TabStop = false;
-            this.picUpdates.Click += new System.EventHandler(this.serverUpdatesButton_Click);
-            this.picUpdates.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picUpdates.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picHomepage
-            // 
-            this.picHomepage.BackColor = System.Drawing.Color.Transparent;
-            this.picHomepage.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picHomepage.Image = global::USALauncher.Properties.Resources.picHomepage_Image;
-            this.picHomepage.Location = new System.Drawing.Point(749, 227);
-            this.picHomepage.Name = "picHomepage";
-            this.picHomepage.Size = new System.Drawing.Size(134, 40);
-            this.picHomepage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picHomepage.TabIndex = 53;
-            this.picHomepage.TabStop = false;
-            this.picHomepage.Click += new System.EventHandler(this.picHomepage_Click);
-            this.picHomepage.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picHomepage.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picRegeln
-            // 
-            this.picRegeln.BackColor = System.Drawing.Color.Transparent;
-            this.picRegeln.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picRegeln.Image = global::USALauncher.Properties.Resources.picRegeln_Image;
-            this.picRegeln.Location = new System.Drawing.Point(749, 181);
-            this.picRegeln.Name = "picRegeln";
-            this.picRegeln.Size = new System.Drawing.Size(134, 40);
-            this.picRegeln.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picRegeln.TabIndex = 54;
-            this.picRegeln.TabStop = false;
-            this.picRegeln.Click += new System.EventHandler(this.picRegeln_Click);
-            this.picRegeln.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picRegeln.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picTeamspeak
-            // 
-            this.picTeamspeak.BackColor = System.Drawing.Color.Transparent;
-            this.picTeamspeak.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picTeamspeak.Image = global::USALauncher.Properties.Resources.picTeamspeak_Image;
-            this.picTeamspeak.Location = new System.Drawing.Point(749, 135);
-            this.picTeamspeak.Name = "picTeamspeak";
-            this.picTeamspeak.Size = new System.Drawing.Size(134, 40);
-            this.picTeamspeak.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picTeamspeak.TabIndex = 55;
-            this.picTeamspeak.TabStop = false;
-            this.picTeamspeak.Click += new System.EventHandler(this.picTeamspeak_Click);
-            this.picTeamspeak.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picTeamspeak.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // picSpielerOnline
-            // 
-            this.picSpielerOnline.BackColor = System.Drawing.Color.Transparent;
-            this.picSpielerOnline.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.picSpielerOnline.Image = global::USALauncher.Properties.Resources.picPlayersonline_Image;
-            this.picSpielerOnline.Location = new System.Drawing.Point(15, 429);
-            this.picSpielerOnline.Name = "picSpielerOnline";
-            this.picSpielerOnline.Size = new System.Drawing.Size(330, 50);
-            this.picSpielerOnline.TabIndex = 56;
-            this.picSpielerOnline.TabStop = false;
-            // 
-            // lblMaxVram2
-            // 
-            this.lblMaxVram2.AutoSize = true;
-            this.lblMaxVram2.BackColor = System.Drawing.Color.Transparent;
-            this.lblMaxVram2.Font = new System.Drawing.Font("Bahnschrift SemiLight", 10F);
-            this.lblMaxVram2.ForeColor = System.Drawing.Color.White;
-            this.lblMaxVram2.Location = new System.Drawing.Point(293, 198);
-            this.lblMaxVram2.Name = "lblMaxVram2";
-            this.lblMaxVram2.Size = new System.Drawing.Size(90, 17);
-            this.lblMaxVram2.TabIndex = 61;
-            this.lblMaxVram2.Text = "➜ 0 = default";
-            // 
-            // playersOnlineLabel
-            // 
-            this.playersOnlineLabel.AutoSize = true;
-            this.playersOnlineLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(42)))));
-            this.playersOnlineLabel.Font = new System.Drawing.Font("Bahnschrift Light", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.playersOnlineLabel.ForeColor = System.Drawing.Color.White;
-            this.playersOnlineLabel.Location = new System.Drawing.Point(49, 432);
-            this.playersOnlineLabel.Name = "playersOnlineLabel";
-            this.playersOnlineLabel.Size = new System.Drawing.Size(201, 29);
-            this.playersOnlineLabel.TabIndex = 67;
-            this.playersOnlineLabel.Text = "Spieler online: ?/?";
-            // 
-            // picLaunch
-            // 
-            this.picLaunch.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picLaunch.Image = global::USALauncher.Properties.Resources.picLaunch_Image;
-            this.picLaunch.Location = new System.Drawing.Point(592, 399);
-            this.picLaunch.Margin = new System.Windows.Forms.Padding(0);
-            this.picLaunch.Name = "picLaunch";
-            this.picLaunch.Opacity = 1F;
-            this.picLaunch.Size = new System.Drawing.Size(291, 80);
-            this.picLaunch.TabIndex = 15;
-            this.picLaunch.TabStop = false;
-            this.picLaunch.Click += new System.EventHandler(this.btnLaunch_Click);
-            this.picLaunch.MouseEnter += new System.EventHandler(this.MouseHoverEnter);
-            this.picLaunch.MouseLeave += new System.EventHandler(this.MouseHoverLeave);
-            // 
-            // Mainframe
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(900, 506);
-            this.ControlBox = false;
-            this.Controls.Add(this.picGetServerInfo);
-            this.Controls.Add(this.playersOnlineLabel);
-            this.Controls.Add(this.picMinimize);
-            this.Controls.Add(this.picReload);
-            this.Controls.Add(this.lblMaxVram2);
-            this.Controls.Add(this.picClose);
-            this.Controls.Add(this.picYoutube);
-            this.Controls.Add(this.picSteam);
-            this.Controls.Add(this.picTeamspeak);
-            this.Controls.Add(this.picRegeln);
-            this.Controls.Add(this.picHomepage);
-            this.Controls.Add(this.picUpdates);
-            this.Controls.Add(this.picDiscord);
-            this.Controls.Add(this.picInstagram);
-            this.Controls.Add(this.picInfo);
-            this.Controls.Add(this.picStatsImage);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.cbRadioMod);
-            this.Controls.Add(this.buttontexture);
-            this.Controls.Add(this.cbnologs);
-            this.Controls.Add(this.cbIntro);
-            this.Controls.Add(this.cbHyper);
-            this.Controls.Add(this.btnProfilePath);
-            this.Controls.Add(this.lblprofilePath);
-            this.Controls.Add(this.lblProfileDescription);
-            this.Controls.Add(this.lblParams);
-            this.Controls.Add(this.txtParams);
-            this.Controls.Add(this.nudVram);
-            this.Controls.Add(this.lblMaxVram);
-            this.Controls.Add(this.cbWindow);
-            this.Controls.Add(this.cbSplash);
-            this.Controls.Add(this.lblProfil);
-            this.Controls.Add(this.cbProfile);
-            this.Controls.Add(this.picLaunch);
-            this.Controls.Add(this.lblArmaSpieler);
-            this.Controls.Add(this.lblVersion);
-            this.Controls.Add(this.wbChangelog);
-            this.Controls.Add(this.btnChangePath);
-            this.Controls.Add(this.lblInstallationPath);
-            this.Controls.Add(this.lblPathDescription);
-            this.Controls.Add(this.picBanner);
-            this.Controls.Add(this.picSpielerOnline);
-            this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(900, 506);
-            this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(900, 506);
-            this.Name = "Mainframe";
-            this.Load += new System.EventHandler(this.MainFrame_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.nudVram)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picInfo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picInstagram)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picStatsImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSteam)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picYoutube)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picClose)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picReload)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picMinimize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picGetServerInfo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBanner)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picDiscord)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picUpdates)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picHomepage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picRegeln)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picTeamspeak)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSpielerOnline)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLaunch)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+        components = new Container();
+        ComponentResourceManager resources = new ComponentResourceManager(typeof(Mainframe));
+        lblPathDescription = new Label();
+        lblInstallationPath = new Label();
+        btnChangePath = new Button();
+        lblVersion = new Label();
+        cbProfile = new ComboBox();
+        lblProfil = new Label();
+        cbSplash = new CheckBox();
+        cbWindow = new CheckBox();
+        lblMaxVram = new Label();
+        nudVram = new NumericUpDown();
+        txtParams = new TextBox();
+        lblParams = new Label();
+        lblProfileDescription = new Label();
+        lblprofilePath = new Label();
+        btnProfilePath = new Button();
+        cbHyper = new CheckBox();
+        cbIntro = new CheckBox();
+        cbnologs = new CheckBox();
+        fbdprofilePath = new FolderBrowserDialog();
+        buttontexture = new Button();
+        toolTip1 = new ToolTip(components);
+        picInfo = new PictureBox();
+        picInstagram = new PictureBox();
+        picStatsImage = new PictureBox();
+        picSteam = new PictureBox();
+        picYoutube = new PictureBox();
+        picClose = new PictureBox();
+        picReload = new PictureBox();
+        picMinimize = new PictureBox();
+        picGetServerInfo = new PictureBox();
+        toolTip2 = new ToolTip(components);
+        toolTipLaunch = new ToolTip(components);
+        picBanner = new PictureBox();
+        picDiscord = new PictureBox();
+        picUpdates = new PictureBox();
+        picHomepage = new PictureBox();
+        picRegeln = new PictureBox();
+        picTeamspeak = new PictureBox();
+        picSpielerOnline = new PictureBox();
+        lblMaxVram2 = new Label();
+        playersOnlineLabel = new Label();
+        picPlay = new PictureBox();
+        ((ISupportInitialize)nudVram).BeginInit();
+        ((ISupportInitialize)picInfo).BeginInit();
+        ((ISupportInitialize)picInstagram).BeginInit();
+        ((ISupportInitialize)picStatsImage).BeginInit();
+        ((ISupportInitialize)picSteam).BeginInit();
+        ((ISupportInitialize)picYoutube).BeginInit();
+        ((ISupportInitialize)picClose).BeginInit();
+        ((ISupportInitialize)picReload).BeginInit();
+        ((ISupportInitialize)picMinimize).BeginInit();
+        ((ISupportInitialize)picGetServerInfo).BeginInit();
+        ((ISupportInitialize)picBanner).BeginInit();
+        ((ISupportInitialize)picDiscord).BeginInit();
+        ((ISupportInitialize)picUpdates).BeginInit();
+        ((ISupportInitialize)picHomepage).BeginInit();
+        ((ISupportInitialize)picRegeln).BeginInit();
+        ((ISupportInitialize)picTeamspeak).BeginInit();
+        ((ISupportInitialize)picSpielerOnline).BeginInit();
+        ((ISupportInitialize)picPlay).BeginInit();
+        SuspendLayout();
+        // 
+        // lblPathDescription
+        // 
+        lblPathDescription.AutoSize = true;
+        lblPathDescription.BackColor = Color.Transparent;
+        lblPathDescription.Font = new Font("Bahnschrift SemiLight", 10F);
+        lblPathDescription.ForeColor = Color.White;
+        lblPathDescription.Location = new Point(14, 105);
+        lblPathDescription.Margin = new Padding(4, 0, 4, 0);
+        lblPathDescription.Name = "lblPathDescription";
+        lblPathDescription.Size = new Size(131, 17);
+        lblPathDescription.TabIndex = 8;
+        lblPathDescription.Text = "Arma 3 Installation:";
+        // 
+        // lblInstallationPath
+        // 
+        lblInstallationPath.AutoSize = true;
+        lblInstallationPath.BackColor = Color.Transparent;
+        lblInstallationPath.Font = new Font("Bahnschrift SemiLight", 10F);
+        lblInstallationPath.ForeColor = Color.FromArgb(34, 197, 94);
+        lblInstallationPath.Location = new Point(225, 112);
+        lblInstallationPath.Margin = new Padding(4, 0, 4, 0);
+        lblInstallationPath.Name = "lblInstallationPath";
+        lblInstallationPath.Size = new Size(77, 17);
+        lblInstallationPath.TabIndex = 9;
+        lblInstallationPath.Text = "UNKNOWN";
+        // 
+        // btnChangePath
+        // 
+        btnChangePath.BackColor = Color.FromArgb(39, 39, 42);
+        btnChangePath.Cursor = Cursors.Hand;
+        btnChangePath.FlatAppearance.BorderColor = Color.DimGray;
+        btnChangePath.FlatAppearance.BorderSize = 2;
+        btnChangePath.FlatStyle = FlatStyle.Popup;
+        btnChangePath.Font = new Font("Bahnschrift SemiLight", 8.5F);
+        btnChangePath.ForeColor = Color.White;
+        btnChangePath.Location = new Point(706, 110);
+        btnChangePath.Margin = new Padding(4, 3, 4, 3);
+        btnChangePath.Name = "btnChangePath";
+        btnChangePath.Size = new Size(128, 27);
+        btnChangePath.TabIndex = 10;
+        btnChangePath.Text = "Pfad ändern";
+        btnChangePath.UseVisualStyleBackColor = false;
+        btnChangePath.Click += btnChangePath_Click;
+        // 
+        // lblVersion
+        // 
+        lblVersion.AutoSize = true;
+        lblVersion.BackColor = Color.Transparent;
+        lblVersion.Font = new Font("Bahnschrift SemiLight", 8.7F);
+        lblVersion.ForeColor = Color.White;
+        lblVersion.Location = new Point(855, 558);
+        lblVersion.Margin = new Padding(4, 0, 4, 0);
+        lblVersion.Name = "lblVersion";
+        lblVersion.Size = new Size(153, 14);
+        lblVersion.TabIndex = 12;
+        lblVersion.Text = "USA LIFE Launcher v1.3.0.0";
+        // 
+        // cbProfile
+        // 
+        cbProfile.BackColor = Color.FromArgb(39, 39, 42);
+        cbProfile.Cursor = Cursors.Hand;
+        cbProfile.DropDownStyle = ComboBoxStyle.DropDownList;
+        cbProfile.FlatStyle = FlatStyle.Flat;
+        cbProfile.Font = new Font("Bahnschrift SemiLight", 9F);
+        cbProfile.ForeColor = SystemColors.Window;
+        cbProfile.FormattingEnabled = true;
+        cbProfile.Location = new Point(229, 195);
+        cbProfile.Margin = new Padding(4, 3, 4, 3);
+        cbProfile.Name = "cbProfile";
+        cbProfile.Size = new Size(325, 22);
+        cbProfile.TabIndex = 16;
+        cbProfile.SelectedIndexChanged += cbProfile_SelectedIndexChanged;
+        // 
+        // lblProfil
+        // 
+        lblProfil.AutoSize = true;
+        lblProfil.BackColor = Color.Transparent;
+        lblProfil.Font = new Font("Bahnschrift SemiLight", 10F);
+        lblProfil.ForeColor = Color.White;
+        lblProfil.Location = new Point(14, 192);
+        lblProfil.Margin = new Padding(4, 0, 4, 0);
+        lblProfil.Name = "lblProfil";
+        lblProfil.Size = new Size(46, 17);
+        lblProfil.TabIndex = 17;
+        lblProfil.Text = "Profil:";
+        // 
+        // cbSplash
+        // 
+        cbSplash.AutoSize = true;
+        cbSplash.BackColor = Color.Transparent;
+        cbSplash.Cursor = Cursors.Hand;
+        cbSplash.Font = new Font("Bahnschrift SemiLight", 10F);
+        cbSplash.ForeColor = Color.White;
+        cbSplash.Location = new Point(682, 210);
+        cbSplash.Margin = new Padding(4, 3, 4, 3);
+        cbSplash.Name = "cbSplash";
+        cbSplash.Size = new Size(145, 21);
+        cbSplash.TabIndex = 18;
+        cbSplash.Text = "kein Splashscreen";
+        cbSplash.UseVisualStyleBackColor = false;
+        cbSplash.CheckedChanged += cbSplash_CheckedChanged;
+        cbSplash.Click += cbSplash_Click;
+        // 
+        // cbWindow
+        // 
+        cbWindow.AutoSize = true;
+        cbWindow.BackColor = Color.Transparent;
+        cbWindow.Cursor = Cursors.Hand;
+        cbWindow.Font = new Font("Bahnschrift SemiLight", 10F);
+        cbWindow.ForeColor = Color.White;
+        cbWindow.Location = new Point(682, 240);
+        cbWindow.Margin = new Padding(4, 3, 4, 3);
+        cbWindow.Name = "cbWindow";
+        cbWindow.Size = new Size(120, 21);
+        cbWindow.TabIndex = 19;
+        cbWindow.Text = "Fenstermodus";
+        cbWindow.UseVisualStyleBackColor = false;
+        cbWindow.Click += cbWindow_Click;
+        // 
+        // lblMaxVram
+        // 
+        lblMaxVram.AutoSize = true;
+        lblMaxVram.BackColor = Color.Transparent;
+        lblMaxVram.Font = new Font("Bahnschrift SemiLight", 10F);
+        lblMaxVram.ForeColor = Color.White;
+        lblMaxVram.Location = new Point(14, 226);
+        lblMaxVram.Margin = new Padding(4, 0, 4, 0);
+        lblMaxVram.Name = "lblMaxVram";
+        lblMaxVram.Size = new Size(127, 17);
+        lblMaxVram.TabIndex = 21;
+        lblMaxVram.Text = "Max. VRAM (in MB)";
+        // 
+        // nudVram
+        // 
+        nudVram.BackColor = Color.FromArgb(39, 39, 42);
+        nudVram.Font = new Font("Bahnschrift SemiLight", 9F);
+        nudVram.ForeColor = Color.White;
+        nudVram.Location = new Point(229, 231);
+        nudVram.Margin = new Padding(4, 3, 4, 3);
+        nudVram.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+        nudVram.Name = "nudVram";
+        nudVram.Size = new Size(106, 22);
+        nudVram.TabIndex = 22;
+        nudVram.ValueChanged += nudVram_ValueChanged;
+        // 
+        // txtParams
+        // 
+        txtParams.BackColor = Color.FromArgb(39, 39, 42);
+        txtParams.Font = new Font("Bahnschrift SemiLight", 10F);
+        txtParams.ForeColor = SystemColors.Window;
+        txtParams.Location = new Point(18, 298);
+        txtParams.Margin = new Padding(4, 3, 4, 3);
+        txtParams.Multiline = true;
+        txtParams.Name = "txtParams";
+        txtParams.Size = new Size(416, 81);
+        txtParams.TabIndex = 23;
+        txtParams.TextChanged += txtParams_TextChanged;
+        // 
+        // lblParams
+        // 
+        lblParams.AutoSize = true;
+        lblParams.BackColor = Color.Transparent;
+        lblParams.Font = new Font("Bahnschrift SemiLight", 10F);
+        lblParams.ForeColor = Color.White;
+        lblParams.Location = new Point(14, 268);
+        lblParams.Margin = new Padding(4, 0, 4, 0);
+        lblParams.Name = "lblParams";
+        lblParams.Size = new Size(338, 17);
+        lblParams.TabIndex = 24;
+        lblParams.Text = "Andere Parameter (z.B. -cpuCount=<Anzahl Cores>)";
+        // 
+        // lblProfileDescription
+        // 
+        lblProfileDescription.AutoSize = true;
+        lblProfileDescription.BackColor = Color.Transparent;
+        lblProfileDescription.Font = new Font("Bahnschrift SemiLight", 10F);
+        lblProfileDescription.ForeColor = Color.White;
+        lblProfileDescription.Location = new Point(14, 143);
+        lblProfileDescription.Margin = new Padding(4, 0, 4, 0);
+        lblProfileDescription.Name = "lblProfileDescription";
+        lblProfileDescription.Size = new Size(122, 17);
+        lblProfileDescription.TabIndex = 25;
+        lblProfileDescription.Text = "Arma 3 Profilpfad:";
+        // 
+        // lblprofilePath
+        // 
+        lblprofilePath.BackColor = Color.Transparent;
+        lblprofilePath.Font = new Font("Bahnschrift SemiLight", 10F);
+        lblprofilePath.ForeColor = Color.FromArgb(34, 197, 94);
+        lblprofilePath.Location = new Point(225, 150);
+        lblprofilePath.Margin = new Padding(4, 0, 4, 0);
+        lblprofilePath.Name = "lblprofilePath";
+        lblprofilePath.Size = new Size(474, 42);
+        lblprofilePath.TabIndex = 27;
+        lblprofilePath.Text = "- coming soon -";
+        // 
+        // btnProfilePath
+        // 
+        btnProfilePath.BackColor = Color.FromArgb(39, 39, 42);
+        btnProfilePath.Cursor = Cursors.Hand;
+        btnProfilePath.FlatStyle = FlatStyle.Popup;
+        btnProfilePath.Font = new Font("Bahnschrift SemiLight", 8.5F);
+        btnProfilePath.ForeColor = Color.White;
+        btnProfilePath.Location = new Point(706, 148);
+        btnProfilePath.Margin = new Padding(4, 3, 4, 3);
+        btnProfilePath.Name = "btnProfilePath";
+        btnProfilePath.Size = new Size(128, 27);
+        btnProfilePath.TabIndex = 28;
+        btnProfilePath.Text = "Pfad ändern";
+        btnProfilePath.UseVisualStyleBackColor = false;
+        btnProfilePath.Click += btnProfilePath_Click;
+        // 
+        // cbHyper
+        // 
+        cbHyper.AutoSize = true;
+        cbHyper.BackColor = Color.Transparent;
+        cbHyper.Cursor = Cursors.Hand;
+        cbHyper.Font = new Font("Bahnschrift SemiLight", 10F);
+        cbHyper.ForeColor = Color.White;
+        cbHyper.Location = new Point(682, 270);
+        cbHyper.Margin = new Padding(4, 3, 4, 3);
+        cbHyper.Name = "cbHyper";
+        cbHyper.Size = new Size(136, 21);
+        cbHyper.TabIndex = 29;
+        cbHyper.Text = "Hyper-Threading";
+        cbHyper.UseVisualStyleBackColor = false;
+        cbHyper.CheckedChanged += cbHyper_CheckedChanged;
+        cbHyper.Click += cbHyper_Click;
+        // 
+        // cbIntro
+        // 
+        cbIntro.AutoSize = true;
+        cbIntro.BackColor = Color.Transparent;
+        cbIntro.Cursor = Cursors.Hand;
+        cbIntro.Font = new Font("Bahnschrift SemiLight", 10F);
+        cbIntro.ForeColor = Color.White;
+        cbIntro.Location = new Point(682, 300);
+        cbIntro.Margin = new Padding(4, 3, 4, 3);
+        cbIntro.Name = "cbIntro";
+        cbIntro.Size = new Size(149, 21);
+        cbIntro.TabIndex = 30;
+        cbIntro.Text = "Intro überspringen";
+        cbIntro.UseVisualStyleBackColor = false;
+        cbIntro.Click += cbIntro_Click;
+        // 
+        // cbnologs
+        // 
+        cbnologs.AutoSize = true;
+        cbnologs.BackColor = Color.Transparent;
+        cbnologs.Cursor = Cursors.Hand;
+        cbnologs.Font = new Font("Bahnschrift SemiLight", 10F);
+        cbnologs.ForeColor = Color.White;
+        cbnologs.Location = new Point(682, 329);
+        cbnologs.Margin = new Padding(4, 3, 4, 3);
+        cbnologs.Name = "cbnologs";
+        cbnologs.Size = new Size(97, 21);
+        cbnologs.TabIndex = 31;
+        cbnologs.Text = "keine Logs";
+        cbnologs.UseVisualStyleBackColor = false;
+        cbnologs.Click += cbnologs_Click;
+        // 
+        // buttontexture
+        // 
+        buttontexture.Location = new Point(334, 398);
+        buttontexture.Margin = new Padding(4, 3, 4, 3);
+        buttontexture.Name = "buttontexture";
+        buttontexture.Size = new Size(51, 27);
+        buttontexture.TabIndex = 38;
+        buttontexture.Text = "Textureupdate";
+        buttontexture.UseVisualStyleBackColor = true;
+        buttontexture.Visible = false;
+        buttontexture.Click += buttontexture_Click;
+        // 
+        // picInfo
+        // 
+        picInfo.BackColor = Color.Transparent;
+        picInfo.Cursor = Cursors.Hand;
+        picInfo.Image = Properties.Resources.picInfo_Image;
+        picInfo.Location = new Point(955, 14);
+        picInfo.Margin = new Padding(4, 3, 4, 3);
+        picInfo.Name = "picInfo";
+        picInfo.Size = new Size(19, 18);
+        picInfo.SizeMode = PictureBoxSizeMode.Zoom;
+        picInfo.TabIndex = 48;
+        picInfo.TabStop = false;
+        toolTip1.SetToolTip(picInfo, "Info´s");
+        picInfo.Click += picInfo_Click;
+        picInfo.MouseEnter += MouseHoverEnter;
+        picInfo.MouseLeave += MouseHoverLeave;
+        // 
+        // picInstagram
+        // 
+        picInstagram.BackColor = Color.Transparent;
+        picInstagram.Cursor = Cursors.Hand;
+        picInstagram.Image = Properties.Resources.picInstagramGrey_Image;
+        picInstagram.Location = new Point(63, 450);
+        picInstagram.Margin = new Padding(4, 3, 4, 3);
+        picInstagram.Name = "picInstagram";
+        picInstagram.Size = new Size(38, 38);
+        picInstagram.SizeMode = PictureBoxSizeMode.Zoom;
+        picInstagram.TabIndex = 49;
+        picInstagram.TabStop = false;
+        toolTip1.SetToolTip(picInstagram, "Folge uns auf Instagram!");
+        picInstagram.Click += picInstagram_Click;
+        picInstagram.MouseEnter += MouseHoverEnter;
+        picInstagram.MouseLeave += MouseHoverLeave;
+        // 
+        // picStatsImage
+        // 
+        picStatsImage.BackColor = Color.FromArgb(39, 39, 42);
+        picStatsImage.Cursor = Cursors.Hand;
+        picStatsImage.Image = Properties.Resources.picStatistic_Image;
+        picStatsImage.Location = new Point(24, 507);
+        picStatsImage.Margin = new Padding(4, 3, 4, 3);
+        picStatsImage.Name = "picStatsImage";
+        picStatsImage.Size = new Size(35, 35);
+        picStatsImage.TabIndex = 47;
+        picStatsImage.TabStop = false;
+        toolTip1.SetToolTip(picStatsImage, "Server Statistik");
+        picStatsImage.Click += picStatsImage_Click;
+        // 
+        // picSteam
+        // 
+        picSteam.BackColor = Color.Transparent;
+        picSteam.Cursor = Cursors.Hand;
+        picSteam.Image = Properties.Resources.picSteamGrey_Image;
+        picSteam.Location = new Point(18, 450);
+        picSteam.Margin = new Padding(4, 3, 4, 3);
+        picSteam.Name = "picSteam";
+        picSteam.Size = new Size(38, 38);
+        picSteam.SizeMode = PictureBoxSizeMode.Zoom;
+        picSteam.TabIndex = 57;
+        picSteam.TabStop = false;
+        toolTip1.SetToolTip(picSteam, "Trete unserer Steam Gruppe bei!");
+        picSteam.Click += picSteam_Click;
+        picSteam.MouseEnter += MouseHoverEnter;
+        picSteam.MouseLeave += MouseHoverLeave;
+        // 
+        // picYoutube
+        // 
+        picYoutube.BackColor = Color.Transparent;
+        picYoutube.Cursor = Cursors.Hand;
+        picYoutube.Image = Properties.Resources.picYoutubeGrey_Image;
+        picYoutube.Location = new Point(108, 450);
+        picYoutube.Margin = new Padding(4, 3, 4, 3);
+        picYoutube.Name = "picYoutube";
+        picYoutube.Size = new Size(38, 38);
+        picYoutube.SizeMode = PictureBoxSizeMode.Zoom;
+        picYoutube.TabIndex = 58;
+        picYoutube.TabStop = false;
+        toolTip1.SetToolTip(picYoutube, "Folge uns auf YouTube!");
+        picYoutube.Click += picYoutube_Click;
+        picYoutube.MouseEnter += MouseHoverEnter;
+        picYoutube.MouseLeave += MouseHoverLeave;
+        // 
+        // picClose
+        // 
+        picClose.BackColor = Color.Transparent;
+        picClose.Cursor = Cursors.Hand;
+        picClose.Image = Properties.Resources.picCloseWhite_Image;
+        picClose.Location = new Point(1016, 14);
+        picClose.Margin = new Padding(4, 3, 4, 3);
+        picClose.Name = "picClose";
+        picClose.Size = new Size(21, 21);
+        picClose.SizeMode = PictureBoxSizeMode.Zoom;
+        picClose.TabIndex = 59;
+        picClose.TabStop = false;
+        toolTip1.SetToolTip(picClose, "Close");
+        picClose.Click += picClose_Click;
+        picClose.MouseEnter += MouseHoverEnter;
+        picClose.MouseLeave += MouseHoverLeave;
+        // 
+        // picReload
+        // 
+        picReload.BackColor = Color.Transparent;
+        picReload.Cursor = Cursors.Hand;
+        picReload.Image = Properties.Resources.picReload_Image;
+        picReload.Location = new Point(582, 460);
+        picReload.Margin = new Padding(1);
+        picReload.Name = "picReload";
+        picReload.Size = new Size(93, 92);
+        picReload.SizeMode = PictureBoxSizeMode.Zoom;
+        picReload.TabIndex = 62;
+        picReload.TabStop = false;
+        toolTip1.SetToolTip(picReload, "Nach Mod- und Missionsupdates suchen");
+        picReload.Click += picReload_Click;
+        picReload.MouseEnter += MouseHoverEnter;
+        picReload.MouseLeave += MouseHoverLeave;
+        // 
+        // picMinimize
+        // 
+        picMinimize.BackColor = Color.Transparent;
+        picMinimize.Cursor = Cursors.Hand;
+        picMinimize.Image = Properties.Resources.picMinimize_Image;
+        picMinimize.Location = new Point(985, 9);
+        picMinimize.Margin = new Padding(4, 3, 4, 3);
+        picMinimize.Name = "picMinimize";
+        picMinimize.Size = new Size(18, 18);
+        picMinimize.SizeMode = PictureBoxSizeMode.Zoom;
+        picMinimize.TabIndex = 63;
+        picMinimize.TabStop = false;
+        toolTip1.SetToolTip(picMinimize, "Minimize");
+        picMinimize.Click += picMinimize_Click;
+        picMinimize.MouseEnter += MouseHoverEnter;
+        picMinimize.MouseLeave += MouseHoverLeave;
+        // 
+        // picGetServerInfo
+        // 
+        picGetServerInfo.BackColor = Color.Transparent;
+        picGetServerInfo.Cursor = Cursors.Hand;
+        picGetServerInfo.Image = Properties.Resources.picReload_Image;
+        picGetServerInfo.Location = new Point(344, 495);
+        picGetServerInfo.Margin = new Padding(4, 3, 4, 3);
+        picGetServerInfo.Name = "picGetServerInfo";
+        picGetServerInfo.Size = new Size(58, 58);
+        picGetServerInfo.SizeMode = PictureBoxSizeMode.Zoom;
+        picGetServerInfo.TabIndex = 68;
+        picGetServerInfo.TabStop = false;
+        toolTip1.SetToolTip(picGetServerInfo, "Serverinfos aktualisieren");
+        picGetServerInfo.Click += picGetServerInfo_Click;
+        picGetServerInfo.MouseEnter += MouseHoverEnter;
+        picGetServerInfo.MouseLeave += MouseHoverLeave;
+        // 
+        // toolTipLaunch
+        // 
+        toolTipLaunch.BackColor = Color.FromArgb(64, 64, 64);
+        toolTipLaunch.ForeColor = Color.Black;
+        // 
+        // picBanner
+        // 
+        picBanner.BackColor = Color.FromArgb(45, 47, 49);
+        picBanner.Image = (Image)resources.GetObject("picBanner.Image");
+        picBanner.Location = new Point(0, -1);
+        picBanner.Margin = new Padding(4, 3, 4, 3);
+        picBanner.Name = "picBanner";
+        picBanner.Size = new Size(1051, 69);
+        picBanner.SizeMode = PictureBoxSizeMode.StretchImage;
+        picBanner.TabIndex = 3;
+        picBanner.TabStop = false;
+        picBanner.MouseDown += picBanner_MouseDown;
+        // 
+        // picDiscord
+        // 
+        picDiscord.BackColor = Color.Transparent;
+        picDiscord.Cursor = Cursors.Hand;
+        picDiscord.Image = Properties.Resources.picDiscord_Image;
+        picDiscord.Location = new Point(874, 103);
+        picDiscord.Margin = new Padding(4, 3, 4, 3);
+        picDiscord.Name = "picDiscord";
+        picDiscord.Size = new Size(156, 46);
+        picDiscord.SizeMode = PictureBoxSizeMode.Zoom;
+        picDiscord.TabIndex = 51;
+        picDiscord.TabStop = false;
+        picDiscord.Click += picDiscord_Click;
+        picDiscord.MouseEnter += MouseHoverEnter;
+        picDiscord.MouseLeave += MouseHoverLeave;
+        // 
+        // picUpdates
+        // 
+        picUpdates.BackColor = Color.Transparent;
+        picUpdates.Cursor = Cursors.Hand;
+        picUpdates.Image = Properties.Resources.picUpdates_Image;
+        picUpdates.Location = new Point(874, 315);
+        picUpdates.Margin = new Padding(4, 3, 4, 3);
+        picUpdates.Name = "picUpdates";
+        picUpdates.Size = new Size(156, 46);
+        picUpdates.SizeMode = PictureBoxSizeMode.Zoom;
+        picUpdates.TabIndex = 52;
+        picUpdates.TabStop = false;
+        picUpdates.Click += serverUpdatesButton_Click;
+        picUpdates.MouseEnter += MouseHoverEnter;
+        picUpdates.MouseLeave += MouseHoverLeave;
+        // 
+        // picHomepage
+        // 
+        picHomepage.BackColor = Color.Transparent;
+        picHomepage.Cursor = Cursors.Hand;
+        picHomepage.Image = Properties.Resources.picHomepage_Image;
+        picHomepage.Location = new Point(874, 262);
+        picHomepage.Margin = new Padding(4, 3, 4, 3);
+        picHomepage.Name = "picHomepage";
+        picHomepage.Size = new Size(156, 46);
+        picHomepage.SizeMode = PictureBoxSizeMode.Zoom;
+        picHomepage.TabIndex = 53;
+        picHomepage.TabStop = false;
+        picHomepage.Click += picHomepage_Click;
+        picHomepage.MouseEnter += MouseHoverEnter;
+        picHomepage.MouseLeave += MouseHoverLeave;
+        // 
+        // picRegeln
+        // 
+        picRegeln.BackColor = Color.Transparent;
+        picRegeln.Cursor = Cursors.Hand;
+        picRegeln.Image = Properties.Resources.picRegeln_Image;
+        picRegeln.Location = new Point(874, 209);
+        picRegeln.Margin = new Padding(4, 3, 4, 3);
+        picRegeln.Name = "picRegeln";
+        picRegeln.Size = new Size(156, 46);
+        picRegeln.SizeMode = PictureBoxSizeMode.Zoom;
+        picRegeln.TabIndex = 54;
+        picRegeln.TabStop = false;
+        picRegeln.Click += picRegeln_Click;
+        picRegeln.MouseEnter += MouseHoverEnter;
+        picRegeln.MouseLeave += MouseHoverLeave;
+        // 
+        // picTeamspeak
+        // 
+        picTeamspeak.BackColor = Color.Transparent;
+        picTeamspeak.Cursor = Cursors.Hand;
+        picTeamspeak.Image = Properties.Resources.picTeamspeak_Image;
+        picTeamspeak.Location = new Point(874, 156);
+        picTeamspeak.Margin = new Padding(4, 3, 4, 3);
+        picTeamspeak.Name = "picTeamspeak";
+        picTeamspeak.Size = new Size(156, 46);
+        picTeamspeak.SizeMode = PictureBoxSizeMode.Zoom;
+        picTeamspeak.TabIndex = 55;
+        picTeamspeak.TabStop = false;
+        picTeamspeak.Click += picTeamspeak_Click;
+        picTeamspeak.MouseEnter += MouseHoverEnter;
+        picTeamspeak.MouseLeave += MouseHoverLeave;
+        // 
+        // picSpielerOnline
+        // 
+        picSpielerOnline.BackColor = Color.Transparent;
+        picSpielerOnline.Image = Properties.Resources.picPlayersonline_Image;
+        picSpielerOnline.Location = new Point(18, 495);
+        picSpielerOnline.Margin = new Padding(4, 3, 4, 3);
+        picSpielerOnline.Name = "picSpielerOnline";
+        picSpielerOnline.Size = new Size(385, 58);
+        picSpielerOnline.SizeMode = PictureBoxSizeMode.Zoom;
+        picSpielerOnline.TabIndex = 56;
+        picSpielerOnline.TabStop = false;
+        // 
+        // lblMaxVram2
+        // 
+        lblMaxVram2.AutoSize = true;
+        lblMaxVram2.BackColor = Color.Transparent;
+        lblMaxVram2.Font = new Font("Bahnschrift SemiLight", 10F);
+        lblMaxVram2.ForeColor = Color.White;
+        lblMaxVram2.Location = new Point(342, 228);
+        lblMaxVram2.Margin = new Padding(4, 0, 4, 0);
+        lblMaxVram2.Name = "lblMaxVram2";
+        lblMaxVram2.Size = new Size(90, 17);
+        lblMaxVram2.TabIndex = 61;
+        lblMaxVram2.Text = "➜ 0 = default";
+        // 
+        // playersOnlineLabel
+        // 
+        playersOnlineLabel.AutoSize = true;
+        playersOnlineLabel.BackColor = Color.FromArgb(39, 39, 42);
+        playersOnlineLabel.Font = new Font("Bahnschrift Light", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+        playersOnlineLabel.ForeColor = Color.White;
+        playersOnlineLabel.Location = new Point(57, 498);
+        playersOnlineLabel.Margin = new Padding(4, 0, 4, 0);
+        playersOnlineLabel.Name = "playersOnlineLabel";
+        playersOnlineLabel.Size = new Size(201, 29);
+        playersOnlineLabel.TabIndex = 67;
+        playersOnlineLabel.Text = "Spieler online: ?/?";
+        // 
+        // picPlay
+        // 
+        picPlay.BackColor = Color.Transparent;
+        picPlay.Cursor = Cursors.Hand;
+        picPlay.Image = Properties.Resources.picLaunch_Image;
+        picPlay.Location = new Point(691, 460);
+        picPlay.Margin = new Padding(4, 3, 4, 3);
+        picPlay.Name = "picPlay";
+        picPlay.Size = new Size(340, 92);
+        picPlay.SizeMode = PictureBoxSizeMode.Zoom;
+        picPlay.TabIndex = 69;
+        picPlay.TabStop = false;
+        picPlay.Click += btnLaunch_Click;
+        picPlay.MouseEnter += MouseHoverEnter;
+        picPlay.MouseLeave += MouseHoverLeave;
+        // 
+        // Mainframe
+        // 
+        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleMode = AutoScaleMode.Font;
+        BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+        BackgroundImageLayout = ImageLayout.Stretch;
+        ClientSize = new Size(1050, 584);
+        ControlBox = false;
+        Controls.Add(picPlay);
+        Controls.Add(picGetServerInfo);
+        Controls.Add(playersOnlineLabel);
+        Controls.Add(picMinimize);
+        Controls.Add(picReload);
+        Controls.Add(lblMaxVram2);
+        Controls.Add(picClose);
+        Controls.Add(picYoutube);
+        Controls.Add(picSteam);
+        Controls.Add(picTeamspeak);
+        Controls.Add(picRegeln);
+        Controls.Add(picHomepage);
+        Controls.Add(picUpdates);
+        Controls.Add(picDiscord);
+        Controls.Add(picInstagram);
+        Controls.Add(picInfo);
+        Controls.Add(picStatsImage);
+        Controls.Add(buttontexture);
+        Controls.Add(cbnologs);
+        Controls.Add(cbIntro);
+        Controls.Add(cbHyper);
+        Controls.Add(btnProfilePath);
+        Controls.Add(lblprofilePath);
+        Controls.Add(lblProfileDescription);
+        Controls.Add(lblParams);
+        Controls.Add(txtParams);
+        Controls.Add(nudVram);
+        Controls.Add(lblMaxVram);
+        Controls.Add(cbWindow);
+        Controls.Add(cbSplash);
+        Controls.Add(lblProfil);
+        Controls.Add(cbProfile);
+        Controls.Add(lblVersion);
+        Controls.Add(btnChangePath);
+        Controls.Add(lblInstallationPath);
+        Controls.Add(lblPathDescription);
+        Controls.Add(picBanner);
+        Controls.Add(picSpielerOnline);
+        DoubleBuffered = true;
+        FormBorderStyle = FormBorderStyle.None;
+        Icon = (Icon)resources.GetObject("$this.Icon");
+        Margin = new Padding(4, 3, 4, 3);
+        MaximizeBox = false;
+        MaximumSize = new Size(1050, 584);
+        MinimizeBox = false;
+        MinimumSize = new Size(1050, 584);
+        Name = "Mainframe";
+        Load += MainFrame_Load;
+        ((ISupportInitialize)nudVram).EndInit();
+        ((ISupportInitialize)picInfo).EndInit();
+        ((ISupportInitialize)picInstagram).EndInit();
+        ((ISupportInitialize)picStatsImage).EndInit();
+        ((ISupportInitialize)picSteam).EndInit();
+        ((ISupportInitialize)picYoutube).EndInit();
+        ((ISupportInitialize)picClose).EndInit();
+        ((ISupportInitialize)picReload).EndInit();
+        ((ISupportInitialize)picMinimize).EndInit();
+        ((ISupportInitialize)picGetServerInfo).EndInit();
+        ((ISupportInitialize)picBanner).EndInit();
+        ((ISupportInitialize)picDiscord).EndInit();
+        ((ISupportInitialize)picUpdates).EndInit();
+        ((ISupportInitialize)picHomepage).EndInit();
+        ((ISupportInitialize)picRegeln).EndInit();
+        ((ISupportInitialize)picTeamspeak).EndInit();
+        ((ISupportInitialize)picSpielerOnline).EndInit();
+        ((ISupportInitialize)picPlay).EndInit();
+        ResumeLayout(false);
+        PerformLayout();
     }
 }

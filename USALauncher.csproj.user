@@ -22,9 +22,6 @@
     <Compile Update="PathSelection.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="PictureBoxOpacity.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="ProfilePathSelection.cs">
       <SubType>Form</SubType>
     </Compile>

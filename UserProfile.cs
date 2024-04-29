@@ -4,15 +4,15 @@ namespace USALauncher;
 
 internal class UserProfile
 {
-	public string path;
+    public string path;
 
-	public UserProfile(string path)
-	{
-		this.path = path;
-	}
+    public UserProfile(string path)
+    {
+        this.path = path;
+    }
 
-	public override string ToString()
-	{
-		return path.Split('\\').Last().Replace("%20", " ");
-	}
+    public override string ToString()
+    {
+        return path.Split('\\').Last().Replace("%20", " ");
+    }
 }
