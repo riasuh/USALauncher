@@ -78,7 +78,7 @@ namespace USALauncher
 
                     Process.Start(tempFileName);
 
-                    Console.WriteLine("Die neueste Version wird heruntergeladen und gestartet...");
+                    System.Diagnostics.Debug.WriteLine("Die neueste Version wird heruntergeladen und gestartet...");
                 }
             }
             catch (Exception ex)
