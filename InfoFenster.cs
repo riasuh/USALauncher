@@ -55,7 +55,6 @@ public class InfoFenster : Form
 
 	private void InitializeComponent()
 	{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoFenster));
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -94,9 +93,9 @@ public class InfoFenster : Form
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(112, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 16);
+            this.label1.Size = new System.Drawing.Size(118, 16);
             this.label1.TabIndex = 2;
-            this.label1.Text = "USA Life Launcher";
+            this.label1.Text = "USA LIFE Launcher";
             // 
             // label2
             // 
@@ -106,9 +105,9 @@ public class InfoFenster : Form
             this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(112, 43);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(226, 16);
+            this.label2.Size = new System.Drawing.Size(233, 16);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Erstellt durch milo Developement";
+            this.label2.Text = "Made with ❤️ by USA LIFE Development";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
@@ -119,9 +118,9 @@ public class InfoFenster : Form
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(112, 73);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(174, 16);
+            this.label3.Size = new System.Drawing.Size(162, 16);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Copyright © 2024 milonet.";
+            this.label3.Text = "Copyright © 2024 USA LIFE";
             // 
             // label4
             // 
@@ -151,7 +150,7 @@ public class InfoFenster : Form
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(28)))), ((int)(((byte)(33)))));
             this.BackgroundImage = global::USALauncher.Properties.Resources.background_14_5;
-            this.ClientSize = new System.Drawing.Size(340, 166);
+            this.ClientSize = new System.Drawing.Size(357, 166);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -159,8 +158,6 @@ public class InfoFenster : Form
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            //this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            //this.Icon = ((System.Drawing.Icon)(resources.GetObject("Icon")));
             this.MaximizeBox = false;
             this.Name = "InfoFenster";
             this.Text = "Informationen";
