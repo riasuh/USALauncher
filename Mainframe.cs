@@ -218,6 +218,7 @@ public class Mainframe : Form
         base.Icon = USALauncher.Properties.Resources.Icon_1_USA_128;
         CenterToScreen();
         lblVersion.Text = "USA LIFE Launcher v." + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
         armaPath = Settings.Default.armaPath.ToString();
         if (string.IsNullOrEmpty(armaPath))
         {
@@ -952,12 +953,12 @@ public class Mainframe : Form
         lblVersion.BackColor = Color.Transparent;
         lblVersion.Font = new Font("Bahnschrift SemiLight", 8.7F);
         lblVersion.ForeColor = Color.White;
-        lblVersion.Location = new Point(855, 558);
+        lblVersion.Location = new Point(874, 558);
         lblVersion.Margin = new Padding(4, 0, 4, 0);
         lblVersion.Name = "lblVersion";
-        lblVersion.Size = new Size(153, 14);
+        lblVersion.Size = new Size(154, 14);
         lblVersion.TabIndex = 12;
-        lblVersion.Text = "USA LIFE Launcher v1.3.0.0";
+        lblVersion.Text = "USA LIFE Launcher v1.0.0.0";
         // 
         // cbProfile
         // 
