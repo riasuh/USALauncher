@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.Cache;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Windows.Forms;

@@ -338,7 +338,7 @@ namespace ByteSizeLib
                 }
 
             if (found == false)
-                throw new FormatException($"No byte indicator found in value '{ s }'.");
+                throw new FormatException($"No byte indicator found in value '{s}'.");
 
             int lastNumber = num;
 
@@ -349,14 +349,14 @@ namespace ByteSizeLib
             // Get the numeric part
             double number;
             if (!double.TryParse(numberPart, NumberStyles.Float | NumberStyles.AllowThousands, NumberFormatInfo.CurrentInfo, out number))
-                throw new FormatException($"No number found in value '{ s }'.");
+                throw new FormatException($"No number found in value '{s}'.");
 
             // Get the magnitude part
             switch (sizePart)
             {
                 case "b":
                     if (number % 1 != 0) // Can't have partial bits
-                        throw new FormatException($"Can't have partial bits for value '{ s }'.");
+                        throw new FormatException($"Can't have partial bits for value '{s}'.");
 
                     return FromBits((long)number);
 
@@ -387,15 +387,15 @@ namespace ByteSizeLib
                 case "pB":
                 case "pb":
                     return FromPetaBytes(number);
-                
+
                 default:
-                    throw new FormatException($"Bytes of magnitude '{ sizePart }' is not supported.");
+                    throw new FormatException($"Bytes of magnitude '{sizePart}' is not supported.");
             }
         }
 
         public static bool TryParse(string s, out ByteSize result)
         {
-            try 
+            try
             {
                 result = Parse(s);
                 return true;
