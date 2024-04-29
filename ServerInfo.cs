@@ -65,7 +65,7 @@ public class ServerInfo
             // Handle den Fall, wenn das Array keine gerade Anzahl von Elementen hat
             // Hier könntest du eine Fehlermeldung ausgeben oder eine geeignete Maßnahme ergreifen.
             // Zum Beispiel:
-            Console.WriteLine("Fehler beim Analysieren der Daten. Ungültige Anzahl von Elementen im Array.");
+            System.Diagnostics.Debug.WriteLine("Fehler beim Analysieren der Daten. Ungültige Anzahl von Elementen im Array.");
             // Oder:
             // throw new ArgumentException("Ungültige Anzahl von Elementen im Array.");
         }

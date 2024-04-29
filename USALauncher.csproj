@@ -12,7 +12,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Logo_1_USA.ico</ApplicationIcon>
     <RootNamespace>USALauncher</RootNamespace>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
@@ -31,7 +31,17 @@
     <None Remove="Properties\NewFolder\**" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app.ico" />
+    <None Remove="JosefinSans-Regular.ttf" />
+    <None Remove="Resources\JosefinSans-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Logo_1_USA.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\JosefinSans-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SteamQuery.NET" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
@@ -48,6 +58,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Update="Properties\Settings.settings">

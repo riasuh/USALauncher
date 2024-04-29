@@ -49,7 +49,7 @@ public class ArmA3ServerInfo
                 byte[] response = udpClient.Receive(ref remoteEP);
 
                 // Protokollieren Sie den Inhalt der response-Variable
-                Console.WriteLine("Response from server: " + BitConverter.ToString(response));
+                System.Diagnostics.Debug.WriteLine("Response from server: " + BitConverter.ToString(response));
 
                 Stopwatch.Stop();
                 ping = Stopwatch.ElapsedMilliseconds;
@@ -70,11 +70,11 @@ public class ArmA3ServerInfo
         }
         catch (SocketException value)
         {
-            Console.WriteLine(value);
+            System.Diagnostics.Debug.WriteLine(value);
         }
         catch (Exception value2)
         {
-            Console.WriteLine(value2);
+            System.Diagnostics.Debug.WriteLine(value2);
         }
     }
 
@@ -84,7 +84,7 @@ public class ArmA3ServerInfo
         // Hier protokollierst du die Ausnahme in einer Datei oder Konsole.
         string logMessage = $"{DateTime.Now.ToString("HH:mm:ss")} - {exceptionType} -> {ex.Message}\nStackTrace: {ex.StackTrace}";
         WriteDownToLog(logMessage);
-        Console.WriteLine(logMessage);
+        System.Diagnostics.Debug.WriteLine(logMessage);
     }
 
 

@@ -61,272 +61,11 @@ namespace USALauncher.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _384591 {
-            get {
-                object obj = ResourceManager.GetObject("384591", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _4501_200 {
-            get {
-                object obj = ResourceManager.GetObject("4501-200", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _6491_200 {
-            get {
-                object obj = ResourceManager.GetObject("6491-200", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _6491_200_Kopie {
-            get {
-                object obj = ResourceManager.GetObject("6491-200 Kopie", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap background_14_5 {
-            get {
-                object obj = ResourceManager.GetObject("background_14_5", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap bg {
-            get {
-                object obj = ResourceManager.GetObject("bg", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap black_pattern_wallpaper {
-            get {
-                object obj = ResourceManager.GetObject("black-pattern-wallpaper", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap close {
-            get {
-                object obj = ResourceManager.GetObject("close", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap dark_wallpaper_mac_os_style_1920x1080_by_edmonam_d4zgdec {
-            get {
-                object obj = ResourceManager.GetObject("dark_wallpaper_mac_os_style_1920x1080_by_edmonam-d4zgdec", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Fenster_X {
-            get {
-                object obj = ResourceManager.GetObject("Fenster_X", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap forum_button {
-            get {
-                object obj = ResourceManager.GetObject("forum_button", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap forumbutton {
-            get {
-                object obj = ResourceManager.GetObject("forumbutton", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap funnytest {
-            get {
-                object obj = ResourceManager.GetObject("funnytest", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap homepage_button {
-            get {
-                object obj = ResourceManager.GetObject("homepage_button", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap homepagebutton {
-            get {
-                object obj = ResourceManager.GetObject("homepagebutton", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_04_512 {
-            get {
-                object obj = ResourceManager.GetObject("icon-04-512", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_04_512_Kopie {
-            get {
-                object obj = ResourceManager.GetObject("icon-04-512 Kopie", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap info_flat {
-            get {
-                object obj = ResourceManager.GetObject("info-flat", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap info_flat_Kopie {
-            get {
-                object obj = ResourceManager.GetObject("info-flat Kopie", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap infoicon {
-            get {
-                object obj = ResourceManager.GetObject("infoicon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap instaicon {
-            get {
-                object obj = ResourceManager.GetObject("instaicon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap kisspng_logo_computer_icons_brand_instagram_logo_5abeac44b22746_2353872515224453807297_Kopie {
-            get {
-                object obj = ResourceManager.GetObject("kisspng-logo-computer-icons-brand-instagram-logo-5abeac44b22746.23538725152244538" +
-                        "07297 Kopie", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Line {
-            get {
-                object obj = ResourceManager.GetObject("Line", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Line_NEW_LOGO {
-            get {
-                object obj = ResourceManager.GetObject("Line_NEW_LOGO", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap logo_small {
-            get {
-                object obj = ResourceManager.GetObject("logo-small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Logo01_darkgrey {
-            get {
-                object obj = ResourceManager.GetObject("Logo01_darkgrey", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
         /// </summary>
-        internal static System.Drawing.Icon LOGO01_darkgrey_PNG250px {
+        internal static System.Drawing.Icon icon {
             get {
-                object obj = ResourceManager.GetObject("LOGO01_darkgrey-PNG250px", resourceCulture);
+                object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -334,9 +73,29 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
         /// </summary>
-        internal static System.Drawing.Icon LOGO01_snowwhite_PNG {
+        internal static System.Drawing.Icon Icon_1_USA_128 {
             get {
-                object obj = ResourceManager.GetObject("LOGO01_snowwhite-PNG", resourceCulture);
+                object obj = ResourceManager.GetObject("Icon_1_USA_128", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        internal static byte[] JosefinSans_Regular {
+            get {
+                object obj = ResourceManager.GetObject("JosefinSans_Regular", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        /// </summary>
+        internal static System.Drawing.Icon Logo_1_USA {
+            get {
+                object obj = ResourceManager.GetObject("Logo_1_USA", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -344,9 +103,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LOGO01_snowwhite_PNG___Kopie {
+        internal static System.Drawing.Bitmap Logo_1_USA_128 {
             get {
-                object obj = ResourceManager.GetObject("LOGO01_snowwhite-PNG - Kopie", resourceCulture);
+                object obj = ResourceManager.GetObject("Logo_1_USA_128", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -354,9 +113,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap logowhite {
+        internal static System.Drawing.Bitmap Logo_3_USAFull {
             get {
-                object obj = ResourceManager.GetObject("logowhite", resourceCulture);
+                object obj = ResourceManager.GetObject("Logo_3_USAFull", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -364,9 +123,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap logowhite100x100 {
+        internal static System.Drawing.Bitmap msgboxMission_Image {
             get {
-                object obj = ResourceManager.GetObject("logowhite100x100", resourceCulture);
+                object obj = ResourceManager.GetObject("msgboxMission.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -374,9 +133,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap logowhiteee {
+        internal static System.Drawing.Bitmap msgboxTexturemod_Image {
             get {
-                object obj = ResourceManager.GetObject("logowhiteee", resourceCulture);
+                object obj = ResourceManager.GetObject("msgboxTexturemod.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -384,9 +143,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Mexican_American_Flag {
+        internal static System.Drawing.Bitmap picBackgroundMainframe_Image {
             get {
-                object obj = ResourceManager.GetObject("Mexican_American_Flag", resourceCulture);
+                object obj = ResourceManager.GetObject("picBackgroundMainframe.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -394,9 +153,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap minimal_29_512 {
+        internal static System.Drawing.Bitmap picCloseRed_Image {
             get {
-                object obj = ResourceManager.GetObject("minimal-29-512", resourceCulture);
+                object obj = ResourceManager.GetObject("picCloseRed_Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -404,9 +163,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap minimal_29_512_Kopie {
+        internal static System.Drawing.Bitmap picCloseWhite_Image {
             get {
-                object obj = ResourceManager.GetObject("minimal-29-512 Kopie", resourceCulture);
+                object obj = ResourceManager.GetObject("picCloseWhite.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -414,9 +173,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap minimize {
+        internal static System.Drawing.Bitmap picDiscord_Image {
             get {
-                object obj = ResourceManager.GetObject("minimize", resourceCulture);
+                object obj = ResourceManager.GetObject("picDiscord.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -424,9 +183,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap msgbox2 {
+        internal static System.Drawing.Bitmap picDownload_Image {
             get {
-                object obj = ResourceManager.GetObject("msgbox2", resourceCulture);
+                object obj = ResourceManager.GetObject("picDownload.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -434,9 +193,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap msgbox3 {
+        internal static System.Drawing.Bitmap picForum_Image {
             get {
-                object obj = ResourceManager.GetObject("msgbox3", resourceCulture);
+                object obj = ResourceManager.GetObject("picForum.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -444,9 +203,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap picclose {
+        internal static System.Drawing.Bitmap picHomepage_Image {
             get {
-                object obj = ResourceManager.GetObject("picclose", resourceCulture);
+                object obj = ResourceManager.GetObject("picHomepage.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -454,9 +213,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap picclose1 {
+        internal static System.Drawing.Bitmap picInfo_Image {
             get {
-                object obj = ResourceManager.GetObject("picclose1", resourceCulture);
+                object obj = ResourceManager.GetObject("picInfo.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -464,9 +223,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap picmin {
+        internal static System.Drawing.Bitmap picInfoBlue_Image {
             get {
-                object obj = ResourceManager.GetObject("picmin", resourceCulture);
+                object obj = ResourceManager.GetObject("picInfoBlue_Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -474,9 +233,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap regeln_button {
+        internal static System.Drawing.Bitmap picInstagram_Image {
             get {
-                object obj = ResourceManager.GetObject("regeln_button", resourceCulture);
+                object obj = ResourceManager.GetObject("picInstagram.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -484,9 +243,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap regelnbutton {
+        internal static System.Drawing.Bitmap picInstagramGrey_Image {
             get {
-                object obj = ResourceManager.GetObject("regelnbutton", resourceCulture);
+                object obj = ResourceManager.GetObject("picInstagramGrey.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -494,9 +253,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap spielenbutton {
+        internal static System.Drawing.Bitmap picLaunch_Image {
             get {
-                object obj = ResourceManager.GetObject("spielenbutton", resourceCulture);
+                object obj = ResourceManager.GetObject("picLaunch.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -504,9 +263,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap spielenbutton2 {
+        internal static System.Drawing.Bitmap picMinimize_Image {
             get {
-                object obj = ResourceManager.GetObject("spielenbutton2", resourceCulture);
+                object obj = ResourceManager.GetObject("picMinimize.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -514,9 +273,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap spielenbutton3 {
+        internal static System.Drawing.Bitmap picMinimizeGreen_Image {
             get {
-                object obj = ResourceManager.GetObject("spielenbutton3", resourceCulture);
+                object obj = ResourceManager.GetObject("picMinimizeGreen_Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -524,9 +283,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap steam {
+        internal static System.Drawing.Bitmap picPlayersonline_Image {
             get {
-                object obj = ResourceManager.GetObject("steam", resourceCulture);
+                object obj = ResourceManager.GetObject("picPlayersonline.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -534,9 +293,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Strich {
+        internal static System.Drawing.Bitmap picRegeln_Image {
             get {
-                object obj = ResourceManager.GetObject("Strich", resourceCulture);
+                object obj = ResourceManager.GetObject("picRegeln.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -544,9 +303,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap teamspeak_button {
+        internal static System.Drawing.Bitmap picReload_Image {
             get {
-                object obj = ResourceManager.GetObject("teamspeak_button", resourceCulture);
+                object obj = ResourceManager.GetObject("picReload.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -554,9 +313,9 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap teamspeakbutton {
+        internal static System.Drawing.Bitmap picStatistic_Image {
             get {
-                object obj = ResourceManager.GetObject("teamspeakbutton", resourceCulture);
+                object obj = ResourceManager.GetObject("picStatistic.Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -564,10 +323,80 @@ namespace USALauncher.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap texture_bw {
+        internal static System.Drawing.Bitmap picSteam_Image {
             get {
-                object obj = ResourceManager.GetObject("texture-bw", resourceCulture);
+                object obj = ResourceManager.GetObject("picSteam_Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap picSteamGrey_Image {
+            get {
+                object obj = ResourceManager.GetObject("picSteamGrey.Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap picTeamspeak_Image {
+            get {
+                object obj = ResourceManager.GetObject("picTeamspeak.Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap picUpdates_Image {
+            get {
+                object obj = ResourceManager.GetObject("picUpdates.Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap picYoutube_Image {
+            get {
+                object obj = ResourceManager.GetObject("picYoutube.Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap picYoutubeGrey_Image {
+            get {
+                object obj = ResourceManager.GetObject("picYoutubeGrey.Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        /// </summary>
+        internal static System.Drawing.Icon TaskbarIconBlack {
+            get {
+                object obj = ResourceManager.GetObject("TaskbarIconBlack", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        /// </summary>
+        internal static System.Drawing.Icon TaskbarIconWhite {
+            get {
+                object obj = ResourceManager.GetObject("TaskbarIconWhite", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }
