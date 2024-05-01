@@ -4,7 +4,13 @@
 
 ## Vorwort
 
-Danke, dass du dir das Repository zu unserem Launcher ansiehst. Da sich bei der Ausführung  Windows Defender beschwert, haben wir uns entschieden, den Quellcode zu veröffentlichen. Bei Bedarf kann der Launcher auch selbst gebaut werden. Außerdem geben wir euch so die Möglichkeit, selbst Änderungen vorzunehmen. Beachte jedoch, dass wir den Launcher nur noch für Arma 3 verwenden werden. Daher wird sich vermutlich auch nicht mehr viel ändern.
+Danke, dass du dir das Repository zu unserem Launcher ansiehst. Da sich bei der Ausführung in manchen Fällen Windows Defender beschweren kann und damit so manch Skepsis erzeugt, haben wir uns entschieden, den Quellcode zu veröffentlichen. Bei Bedarf kann der Launcher auch selbst gebaut werden. Außerdem geben wir euch so die Möglichkeit, selbst Änderungen vorzunehmen. Beachte jedoch, dass wir den Launcher nur noch für Arma 3 verwenden werden. Daher wird sich vermutlich auch nicht mehr viel ändern.
+
+## Einführung
+
+Der USA Launcher ist eine WinForms-App, die mit C# entwickelt wurde. Hauptziel des Launchers ist, den Gameserver zu entlasten sowie schnellere Ladezeiten zu ermöglichen (durch Download der Missionfile via Fileserver). Zusätzlich wird per Launcher exklusiv eine Texturemod angeboten, in der sämtliche Texturen für den Server in hoher Auflösung vorhanden sind.
+
+Anfangs basierte die App auf dem .NET Framework 4.5.2 bzw. später auf dem .NET Framework 4.6.1. Vor kurzem wurde die App jedoch auf [.NET 8](https://learn.microsoft.com/de-de/dotnet/core/whats-new/dotnet-8/overview) migriert, um eine einzige ausführbare Datei zu ermöglichen. Der Vorteil dabei ist, dass keine zusätzlichen Anforderungen für die Nutzer bestehen – es müssen keine zusätzlichen .NET-Runtimes, Frameworks oder .dlls installiert werden. Dies ist auch der Grund, warum die Größe der .exe im Vergleich etwas zugenommen hat. Die Spieleranzahl des Servers wird mithilfe des integrierten [SteamQuery.NET-Pakets](https://www.nuget.org/packages/SteamQuery.NET) abgewickelt.
 
 ## Einrichten der Entwicklungsumgebung
 

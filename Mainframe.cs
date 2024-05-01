@@ -235,6 +235,7 @@ public class Mainframe : Form
         defaultprofilepath = Environment.GetEnvironmentVariable("userprofile") + "\\Documents\\Arma 3 - Other Profiles";
         profilePath = Settings.Default["profilePath"].ToString();
         loadProfiles();
+        lblprofilePath.Text = profilePath;
         lblInstallationPath.Text = armaPath;
         cbSplash.Checked = Settings.Default.noSplash;
         cbWindow.Checked = Settings.Default.windowed;
@@ -562,15 +563,26 @@ public class Mainframe : Form
     private void loadProfiles()
     {
         cbProfile.Items.Clear();
-        string[] directories = Directory.GetDirectories(lblprofilePath.Text);
-        foreach (string text in directories)
+        lblprofilePath.Text = profilePath;
+        // Überprüfen Sie, ob lblprofilePath.Text leer oder null ist
+        if (!string.IsNullOrEmpty(lblprofilePath.Text))
         {
-            UserProfile userProfile = new UserProfile(text);
-            cbProfile.Items.Add(userProfile);
-            if (Settings.Default.profile != null && Settings.Default.profile == text)
+            string[] directories = Directory.GetDirectories(lblprofilePath.Text);
+
+            foreach (string text in directories)
             {
-                cbProfile.SelectedItem = userProfile;
+                UserProfile userProfile = new UserProfile(text);
+                cbProfile.Items.Add(userProfile);
+                if (Settings.Default.profile != null && Settings.Default.profile == text)
+                {
+                    cbProfile.SelectedItem = userProfile;
+                }
             }
+        }
+        else
+        {
+            // Behandeln Sie den Fall, wenn der Pfad leer oder null ist
+            MessageBox.Show("Der Profilpfad wurde nicht richtig geladen.\nBitte die Anwendung nochmals starten.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
