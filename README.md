@@ -1,7 +1,5 @@
 # USA LIFE | Launcher
 
-[[_TOC_]]
-
 ## Vorwort
 
 Danke, dass du dir das Repository zu unserem Launcher ansiehst. Da sich bei der Ausführung in manchen Fällen Windows Defender beschweren kann und damit so manch Skepsis erzeugt, haben wir uns entschieden, den Quellcode zu veröffentlichen. Bei Bedarf kann der Launcher auch selbst gebaut werden. Außerdem geben wir euch so die Möglichkeit, selbst Änderungen vorzunehmen. Beachte jedoch, dass wir den Launcher nur noch für Arma 3 verwenden werden. Daher wird sich vermutlich auch nicht mehr viel ändern.
