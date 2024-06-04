@@ -36,7 +36,7 @@ public class InfoForm : Form
 
     private void btnFAQ_Click(object sender, EventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://usa-life.net/anleitung?o") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo("https://usa-life.net/connect/download") { UseShellExecute = true });
     }
 
     private void btnOK_Click(object sender, EventArgs e)

@@ -279,7 +279,7 @@ public class Mainframe : Form
 
     private void picRegeln_Click(object sender, EventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://usa-life.net/regeln") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo("https://wiki.usa-life.net/de/Regelwerk/Server") { UseShellExecute = true });
     }
 
     private void picHomepage_Click(object sender, EventArgs e)
@@ -294,7 +294,7 @@ public class Mainframe : Form
 
     private void serverUpdatesButton_Click(object sender, EventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://discord.gg/usaliferpg") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo("https://wiki.usa-life.net/de/Changelog") { UseShellExecute = true });
     }
 
     private void picSteam_Click(object sender, EventArgs e)
