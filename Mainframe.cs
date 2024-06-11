@@ -13,6 +13,7 @@ using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using USALauncher.Properties;
 using USALauncher.Resources;
 
 namespace USALauncher;
