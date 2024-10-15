@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -27,9 +28,10 @@ namespace USALauncher
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(defaultValue: false);
-            Application.Run(new Mainframe());
-        }
 
+            Application.Run(new Mainframe());
+
+        }
         private static void CheckForUpdates()
         {
             using (WebClient webClient = new WebClient())

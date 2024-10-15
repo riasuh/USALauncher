@@ -8,149 +8,187 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace USALauncher.Properties {
-    
-    
+using System.Configuration;
+
+namespace USALauncher.Properties
+{
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.5.0.0")]
+    [SettingsProvider(typeof(CustomSettingsProvider))]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
+    {
+
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
-        public static Settings Default {
-            get {
+
+        public static Settings Default
+        {
+            get
+            {
                 return defaultInstance;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string armaPath {
-            get {
+        public string armaPath
+        {
+            get
+            {
                 return ((string)(this["armaPath"]));
             }
-            set {
+            set
+            {
                 this["armaPath"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool UpgradeRequired {
-            get {
+        public bool UpgradeRequired
+        {
+            get
+            {
                 return ((bool)(this["UpgradeRequired"]));
             }
-            set {
+            set
+            {
                 this["UpgradeRequired"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string profile {
-            get {
+        public string profile
+        {
+            get
+            {
                 return ((string)(this["profile"]));
             }
-            set {
+            set
+            {
                 this["profile"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool noSplash {
-            get {
+        public bool noSplash
+        {
+            get
+            {
                 return ((bool)(this["noSplash"]));
             }
-            set {
+            set
+            {
                 this["noSplash"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool windowed {
-            get {
+        public bool windowed
+        {
+            get
+            {
                 return ((bool)(this["windowed"]));
             }
-            set {
+            set
+            {
                 this["windowed"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int maxVram {
-            get {
+        public int maxVram
+        {
+            get
+            {
                 return ((int)(this["maxVram"]));
             }
-            set {
+            set
+            {
                 this["maxVram"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string customParams {
-            get {
+        public string customParams
+        {
+            get
+            {
                 return ((string)(this["customParams"]));
             }
-            set {
+            set
+            {
                 this["customParams"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string profilePath {
-            get {
+        public string profilePath
+        {
+            get
+            {
                 return ((string)(this["profilePath"]));
             }
-            set {
+            set
+            {
                 this["profilePath"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string noLogs {
-            get {
-                return ((string)(this["noLogs"]));
+        public bool noLogs
+        {
+            get
+            {
+                return ((bool)(this["noLogs"]));
             }
-            set {
+            set
+            {
                 this["noLogs"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool enableHT {
-            get {
+        public bool enableHT
+        {
+            get
+            {
                 return ((bool)(this["enableHT"]));
             }
-            set {
+            set
+            {
                 this["enableHT"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool skipIntro {
-            get {
+        public bool skipIntro
+        {
+            get
+            {
                 return ((bool)(this["skipIntro"]));
             }
-            set {
+            set
+            {
                 this["skipIntro"] = value;
             }
         }

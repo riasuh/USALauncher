@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
+using USALauncher.Properties;
 namespace USALauncher;
 
 public class ProfilePathSelection : Form

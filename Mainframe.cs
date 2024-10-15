@@ -13,6 +13,7 @@ using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using USALauncher.Properties;
 using USALauncher.Resources;
 
 namespace USALauncher;
@@ -142,6 +143,7 @@ public class Mainframe : Form
 
         // Spielerinformationen initial laden
         LoadPlayerInformation();
+
     }
     private async void LoadPlayerInformation()
     {
@@ -182,16 +184,17 @@ public class Mainframe : Form
 
     private void WriteDownToLog(string message)
     {
+        string logdirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Application.CompanyName, Application.ProductName + "\\Logs");
         // Versuche, den Mutex zu sperren
         if (logMutex.WaitOne())
         {
             try
             {
-                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Logs"))
+                if (!Directory.Exists(logdirectory))
                 {
-                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Logs");
+                    Directory.CreateDirectory(logdirectory);
                 }
-                using (StreamWriter streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "Logs\\ErrorLog-" + DateTime.Now.ToString("dd-MM-yyyy"), append: true))
+                using (StreamWriter streamWriter = new StreamWriter(logdirectory + "\\ErrorLog-" + DateTime.Now.ToString("dd-MM-yyyy"), append: true))
                 {
                     streamWriter.WriteLine(message);
                 }
@@ -279,7 +282,7 @@ public class Mainframe : Form
 
     private void picRegeln_Click(object sender, EventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://usa-life.net/regeln") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo("https://wiki.usa-life.net/de/Regelwerk/Server") { UseShellExecute = true });
     }
 
     private void picHomepage_Click(object sender, EventArgs e)
@@ -294,7 +297,7 @@ public class Mainframe : Form
 
     private void serverUpdatesButton_Click(object sender, EventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://discord.gg/usaliferpg") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo("https://wiki.usa-life.net/de/Changelog") { UseShellExecute = true });
     }
 
     private void picSteam_Click(object sender, EventArgs e)

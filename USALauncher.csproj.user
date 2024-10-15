@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>C:\private\USA\recover\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="InfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="DownloadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MissionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="TexturemodForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Mainframe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PathSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ProfilePathSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="DownloadForm.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="InfoForm.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Mainframe.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PathSelection.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ProfilePathSelection.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
