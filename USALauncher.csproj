@@ -5,6 +5,8 @@
 		<OutputType>WinExe</OutputType>
 		<UseWindowsForms>True</UseWindowsForms>
 		<TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
+		<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
+		<!-- Add RuntimeIdentifiers here -->
 		<Prefer32Bit>True</Prefer32Bit>
 	</PropertyGroup>
 	<PropertyGroup>

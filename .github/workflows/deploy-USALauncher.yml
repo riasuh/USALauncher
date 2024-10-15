@@ -22,10 +22,6 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: List All Files
-        run: |
-          Get-ChildItem -Recurse -Force
-
       - name: Restore Dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
