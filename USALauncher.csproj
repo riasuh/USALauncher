@@ -1,71 +1,75 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <PropertyGroup>
-    <AssemblyName>USALauncher</AssemblyName>
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <OutputType>WinExe</OutputType>
-    <UseWindowsForms>True</UseWindowsForms>
-    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
-    <Prefer32Bit>True</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>11.0</LangVersion>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\Logo_1_USA.ico</ApplicationIcon>
-    <RootNamespace>USALauncher</RootNamespace>
-    <PlatformTarget>x64</PlatformTarget>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-    <NeutralLanguage>de</NeutralLanguage>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
-    <PackageTags>usalauncher</PackageTags>
-    <PackageReleaseNotes>rework of application</PackageReleaseNotes>
-    <Authors>riasuh</Authors>
-    <Version>1.4.0.0</Version>
-    <Title>USALauncher</Title>
-    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Properties\NewFolder\**" />
-    <EmbeddedResource Remove="Properties\NewFolder\**" />
-    <None Remove="Properties\NewFolder\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="JosefinSans-Regular.ttf" />
-    <None Remove="Resources\JosefinSans-Regular.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Logo_1_USA.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\JosefinSans-Regular.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="SteamQuery.NET" Version="1.1.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+	<PropertyGroup>
+		<AssemblyName>USALauncher</AssemblyName>
+		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+		<OutputType>WinExe</OutputType>
+		<UseWindowsForms>True</UseWindowsForms>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<!-- Change made here -->
+		<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
+		<!-- Added RuntimeIdentifiers -->
+		<PlatformTarget>x64</PlatformTarget>
+		<!-- Retained this -->
+	</PropertyGroup>
+	<PropertyGroup>
+		<LangVersion>11.0</LangVersion>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<PropertyGroup>
+		<ApplicationIcon>Resources\Logo_1_USA.ico</ApplicationIcon>
+		<RootNamespace>USALauncher</RootNamespace>
+		<ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+		<NeutralLanguage>de</NeutralLanguage>
+		<AssemblyVersion>1.4.0.0</AssemblyVersion>
+		<FileVersion>1.4.0.0</FileVersion>
+		<PackageTags>usalauncher</PackageTags>
+		<PackageReleaseNotes>rework of application</PackageReleaseNotes>
+		<Authors>riasuh</Authors>
+		<Version>1.4.0.0</Version>
+		<Title>USALauncher</Title>
+		<SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="Properties\NewFolder\**" />
+		<EmbeddedResource Remove="Properties\NewFolder\**" />
+		<None Remove="Properties\NewFolder\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="JosefinSans-Regular.ttf" />
+		<None Remove="Resources\JosefinSans-Regular.ttf" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="Resources\Logo_1_USA.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\JosefinSans-Regular.ttf" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="SteamQuery.NET" Version="1.1.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Properties\Settings.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>
+				True</DesignTimeSharedInput>
+				<DependentUpon>Settings.settings</DependentUpon>
+			</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="Properties\Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
 </Project>
