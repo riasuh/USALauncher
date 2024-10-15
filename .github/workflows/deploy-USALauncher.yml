@@ -6,7 +6,7 @@ on:
       - "USALauncher/v*"
 
 env:
-  PROJECT_PATH: USALauncher.csproj  # Adjusted path to point directly to the .csproj file
+  PROJECT_PATH: USALauncher.csproj  # Adjusted path to point to the .csproj file correctly
 
 jobs:
   deploy:
@@ -21,6 +21,13 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+
+      - name: Install .NET Workloads
+        run: dotnet workload restore
+
+      - name: List All Files
+        run: |
+          Get-ChildItem -Recurse -Force
 
       - name: Restore Dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
