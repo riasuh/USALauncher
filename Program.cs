@@ -68,7 +68,7 @@ namespace USALauncher
         {
             try
             {
-                // Implementiere das Herunterladen und Starten der neuesten Version
+                // Implementiere das herunterladen und starten der neuesten Version
                 using (WebClient webClient = new WebClient())
                 {
                     webClient.Headers.Add("user-agent", "Only a test!");
