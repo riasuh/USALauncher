@@ -42,9 +42,12 @@ jobs:
 
     # Publish the application with specified settings
     - name: Publish the application
+      shell: pwsh  # Specify PowerShell as the shell
       run: |
-        dotnet publish $env:Solution_Name --configuration $env:Configuration --output ./publish \
-        --self-contained true --runtime win-x64 --publish-single-file true
+        dotnet publish $env:Solution_Name --configuration $env:Configuration --output ./publish `
+        --self-contained true `
+        --runtime win-x64 `
+        --publish-single-file true
       env:
         Configuration: ${{ matrix.configuration }}
 
