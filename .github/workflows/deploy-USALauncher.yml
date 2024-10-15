@@ -91,7 +91,7 @@ jobs:
         draft: false
         prerelease: false
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # Use your PAT here
 
     # Upload each split part as a release asset
     - name: Upload Release Assets
@@ -101,3 +101,4 @@ jobs:
         asset_path: USALauncher.part*.zip
         asset_name: ${{ github.event_name }}-${{ github.sha }}-${{ matrix.configuration }}.zip
         asset_content_type: application/zip
+
