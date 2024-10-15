@@ -6,7 +6,7 @@ on:
       - "USALauncher/v*"
 
 env:
-  PROJECT_PATH: USALauncher.csproj  # Adjusted path to point to the .csproj file correctly
+  PROJECT_PATH: USALauncher/USALauncher.csproj  # Adjusted path
 
 jobs:
   deploy:
@@ -30,18 +30,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: List All Files
-        run: |
-          Get-ChildItem -Recurse -Force
-
       - name: Restore Dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: Restore Workloads
+        run: dotnet workload restore
 
       - name: Build Project
         run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
 
       - name: Publish Project
-        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true
 
       - name: Create Release
         id: create_release
