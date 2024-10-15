@@ -51,9 +51,13 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
-    # Upload the build artifacts
+    # Compress the output directory before uploading
+    - name: Compress Publish Folder
+      run: Compress-Archive -Path ./publish -DestinationPath USALauncher.zip
+
+    # Upload the compressed artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: USALauncher
-        path: ./publish
+        path: USALauncher.zip
