@@ -31,8 +31,9 @@ jobs:
 
       - name: Create Release
         id: create_release
+        uses: actions/create-release@v1  # Use the create-release action
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token
         with:
           tag_name: ${{ github.ref }}  # Use the tag that triggered the workflow
           release_name: ${{ github.ref }}  # Use the tag as the release name
@@ -41,5 +42,5 @@ jobs:
         uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: USALauncher/bin/Release/net6.0/win-x64/publish/*  # Adjust the path if necessary
+          pattern: USALauncher/bin/Release/net8.0/win-x64/publish/*  # Adjust the path if necessary
           release-url: ${{ steps.create_release.outputs.upload_url }}
