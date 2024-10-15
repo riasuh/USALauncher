@@ -55,11 +55,11 @@ jobs:
     - name: Compress Publish Folder
       run: Compress-Archive -Path ./publish -DestinationPath USALauncher.zip
 
-    # Split the ZIP file into smaller chunks (45MB each)
+    # Split the ZIP file into smaller chunks (30MB each)
     - name: Split the ZIP file
       shell: pwsh
       run: |
-        $chunkSize = 45MB  # Lowered chunk size to prevent issues
+        $chunkSize = 30MB  # Further reduced chunk size
         $fileIndex = 0
         $filePath = "USALauncher.zip"
         $fileStream = [System.IO.File]::OpenRead($filePath)
@@ -74,6 +74,10 @@ jobs:
         }
 
         $fileStream.Close()
+
+    # Add a delay before the upload to mitigate transient issues
+    - name: Wait before upload
+      run: Start-Sleep -Seconds 10  # Adjust the duration as necessary
 
     # Upload each split part as an individual artifact
     - name: Upload split artifacts
