@@ -45,9 +45,9 @@ jobs:
       shell: pwsh  # Specify PowerShell as the shell
       run: |
         dotnet publish $env:Solution_Name --configuration $env:Configuration --output ./publish `
-        --self-contained true `
-        --runtime win-x64 `
-        --publish-single-file true
+        /p:SelfContained=true `
+        /p:RuntimeIdentifier=win-x64 `
+        /p:PublishSingleFile=true
       env:
         Configuration: ${{ matrix.configuration }}
 
