@@ -33,9 +33,6 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
-      - name: Restore Workloads
-        run: dotnet workload restore
-
       - name: Build Project
         run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
 
