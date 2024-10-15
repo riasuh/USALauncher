@@ -4,12 +4,8 @@
 		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 		<OutputType>WinExe</OutputType>
 		<UseWindowsForms>True</UseWindowsForms>
-		<TargetFramework>net8.0-windows</TargetFramework>
-		<!-- Change made here -->
-		<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
-		<!-- Added RuntimeIdentifiers -->
-		<PlatformTarget>x64</PlatformTarget>
-		<!-- Retained this -->
+		<TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
+		<Prefer32Bit>True</Prefer32Bit>
 	</PropertyGroup>
 	<PropertyGroup>
 		<LangVersion>11.0</LangVersion>
@@ -18,6 +14,7 @@
 	<PropertyGroup>
 		<ApplicationIcon>Resources\Logo_1_USA.ico</ApplicationIcon>
 		<RootNamespace>USALauncher</RootNamespace>
+		<PlatformTarget>x64</PlatformTarget>
 		<ApplicationManifest>Properties\app.manifest</ApplicationManifest>
 		<NeutralLanguage>de</NeutralLanguage>
 		<AssemblyVersion>1.4.0.0</AssemblyVersion>
@@ -55,10 +52,9 @@
 		</Compile>
 		<Compile Update="Properties\Settings.Designer.cs">
 			<DesignTimeSharedInput>True</DesignTimeSharedInput>
-			<AutoGen>
-				True</DesignTimeSharedInput>
-				<DependentUpon>Settings.settings</DependentUpon>
-			</Compile>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+		</Compile>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Properties\Resources.resx">
