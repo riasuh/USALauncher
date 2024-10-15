@@ -6,7 +6,7 @@ on:
       - "USALauncher/v*"
 
 env:
-  PROJECT_PATH: USALauncher/USALauncher.csproj  # Ensure this is the correct path
+  PROJECT_PATH: USALauncher.csproj  # Adjusted path to point directly to the .csproj file
 
 jobs:
   deploy:
@@ -48,5 +48,5 @@ jobs:
         uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: USALauncher/bin/Release/net8.0/win-x64/publish/*
+          pattern: bin/Release/net8.0/win-x64/publish/*
           release-url: ${{ steps.create_release.outputs.upload_url }}
