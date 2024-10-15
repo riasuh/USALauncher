@@ -55,11 +55,11 @@ jobs:
     - name: Compress Publish Folder
       run: Compress-Archive -Path ./publish -DestinationPath USALauncher.zip
 
-    # Split the ZIP file into chunks (50MB each)
+    # Split the ZIP file into smaller chunks (45MB each)
     - name: Split the ZIP file
       shell: pwsh
       run: |
-        $chunkSize = 50MB
+        $chunkSize = 45MB  # Lowered chunk size to prevent issues
         $fileIndex = 0
         $filePath = "USALauncher.zip"
         $fileStream = [System.IO.File]::OpenRead($filePath)
