@@ -43,6 +43,9 @@ jobs:
       - name: Publish Project
         run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true
 
+      - name: List Published Files
+        run: dir bin\Release\net8.0-windows10.0.22621.0\win-x64\publish
+      
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -58,7 +61,7 @@ jobs:
         uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: bin/Release/net8.0/win-x64/publish/**/*.exe
+          pattern: bin/Release/net8.0-windows10.0.22621.0/win-x64/publish/*
           release-url: ${{ steps.create_release.outputs.upload_url }}
 
 
