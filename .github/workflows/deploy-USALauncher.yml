@@ -55,9 +55,29 @@ jobs:
     - name: Compress Publish Folder
       run: Compress-Archive -Path ./publish -DestinationPath USALauncher.zip
 
-    # Upload the compressed artifact
-    - name: Upload build artifacts
+    # Split the ZIP file into chunks (50MB each)
+    - name: Split the ZIP file
+      shell: pwsh
+      run: |
+        $chunkSize = 50MB
+        $fileIndex = 0
+        $filePath = "USALauncher.zip"
+        $fileStream = [System.IO.File]::OpenRead($filePath)
+        $buffer = New-Object byte[] $chunkSize
+
+        while (($bytesRead = $fileStream.Read($buffer, 0, $chunkSize)) -gt 0) {
+            $chunkFileName = "USALauncher.part$($fileIndex).zip"
+            $fileIndex++
+            $chunkStream = [System.IO.File]::Create($chunkFileName)
+            $chunkStream.Write($buffer, 0, $bytesRead)
+            $chunkStream.Close()
+        }
+
+        $fileStream.Close()
+
+    # Upload each split part as an individual artifact
+    - name: Upload split artifacts
       uses: actions/upload-artifact@v3
       with:
         name: USALauncher
-        path: USALauncher.zip
+        path: "*.part*.zip"
