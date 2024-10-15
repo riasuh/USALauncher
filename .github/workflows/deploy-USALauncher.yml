@@ -6,7 +6,7 @@ on:
       - "USALauncher/v*"
 
 env:
-  PROJECT_PATH: USALauncher/USALauncher.csproj  # Adjusted path
+  PROJECT_PATH: USALauncher.csproj  # Adjusted path
 
 jobs:
   deploy:
