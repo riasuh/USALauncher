@@ -5,8 +5,12 @@ on:
     tags:
       - "USALauncher/v*"
 
+permissions:
+  contents: write
+  deployments: write
+
 env:
-  PROJECT_PATH: USALauncher.csproj  # Adjusted path
+  PROJECT_PATH: USALauncher.csproj
 
 jobs:
   deploy:
@@ -43,10 +47,12 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Make sure you have this secret set up correctly
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
 
       - name: Upload Release Assets
         uses: csexton/release-asset-action@v2
