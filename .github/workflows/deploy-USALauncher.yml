@@ -1,104 +1,45 @@
-name: .NET Core Desktop
+name: "Deploy USALauncher"
 
 on:
   push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "dev" ]
-  release:
-    types: [created]  # Optional: If you want to handle release events
+    tags:
+      - "USALauncher/v*"  # Trigger on tags like "USALauncher/v1.0"
+
+env:
+  PROJECT_PATH: USALauncher/USALauncher.csproj  # Adjust this if your project file path is different
 
 jobs:
-
-  build:
-
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
-
+  deploy:
     runs-on: windows-latest
-
-    env:
-      Solution_Name: USALauncher.sln
-      Configuration: ${{ matrix.configuration }}
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout Code
+        uses: actions/checkout@v4  # Using the latest version
 
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x  # Adjust the .NET version as necessary
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
+      - name: Restore Dependencies
+        run: dotnet restore ${{ env.PROJECT_PATH }}
 
-    # Restore and Build the solution
-    - name: Restore and Build
-      run: dotnet build $env:Solution_Name --configuration $env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
+      - name: Build Project
+        run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
 
-    # Publish the application with specified settings
-    - name: Publish the application
-      shell: pwsh  # Specify PowerShell as the shell
-      run: |
-        dotnet publish $env:Solution_Name --configuration $env:Configuration --output ./publish `
-        /p:SelfContained=true `
-        /p:RuntimeIdentifier=win-x64 `
-        /p:PublishSingleFile=true
-      env:
-        Configuration: ${{ matrix.configuration }}
+      - name: Publish Project
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build
 
-    # Compress the output directory before uploading
-    - name: Compress Publish Folder
-      run: Compress-Archive -Path ./publish -DestinationPath USALauncher.zip
+      - name: Create Release
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}  # Use the tag that triggered the workflow
+          release_name: ${{ github.ref }}  # Use the tag as the release name
 
-    # Split the ZIP file into smaller chunks (30MB each)
-    - name: Split the ZIP file
-      shell: pwsh
-      run: |
-        $chunkSize = 30MB  # Further reduced chunk size
-        $fileIndex = 0
-        $filePath = "USALauncher.zip"
-        $fileStream = [System.IO.File]::OpenRead($filePath)
-        $buffer = New-Object byte[] $chunkSize
-
-        while (($bytesRead = $fileStream.Read($buffer, 0, $chunkSize)) -gt 0) {
-            $chunkFileName = "USALauncher.part$($fileIndex).zip"
-            $fileIndex++
-            $chunkStream = [System.IO.File]::Create($chunkFileName)
-            $chunkStream.Write($buffer, 0, $bytesRead)
-            $chunkStream.Close()
-        }
-
-        $fileStream.Close()
-
-    # Add a delay before the upload to mitigate transient issues
-    - name: Wait before upload
-      run: Start-Sleep -Seconds 10  # Adjust the duration as necessary
-
-    # Create a Release
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      with:
-        tag_name: ${{ github.ref }}  # Use the tag that triggered the workflow
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # Use your PAT here
-
-    # Upload each split part as a release asset
-    - name: Upload Release Assets
-      uses: actions/upload-release-asset@v1
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: USALauncher.part*.zip
-        asset_name: ${{ github.event_name }}-${{ github.sha }}-${{ matrix.configuration }}.zip
-        asset_content_type: application/zip
-
+      - name: Upload Release Assets
+        uses: csexton/release-asset-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: USALauncher/bin/Release/net6.0/win-x64/publish/*  # Adjust the path if necessary
+          release-url: ${{ steps.create_release.outputs.upload_url }}
