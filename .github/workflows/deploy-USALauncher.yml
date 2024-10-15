@@ -3,22 +3,27 @@ name: "Deploy USALauncher"
 on:
   push:
     tags:
-      - "USALauncher/v*"  # Trigger on tags like "USALauncher/v1.0"
+      - "USALauncher/v*"
 
 env:
-  PROJECT_PATH: USALauncher/USALauncher.csproj  # Adjust this if your project file path is different
+  PROJECT_PATH: USALauncher/USALauncher.csproj  # Ensure this is the correct path
 
 jobs:
   deploy:
     runs-on: windows-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4  # Using the latest version
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x  # Adjust the .NET version as necessarys
+          dotnet-version: 8.0.x
+
+      - name: List Directory Contents
+        run: dir USALauncher  # This will show the contents of the USALauncher directory
 
       - name: Restore Dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
@@ -31,16 +36,16 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1  # Use the create-release action
+        uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}  # Use the tag that triggered the workflow
-          release_name: ${{ github.ref }}  # Use the tag as the release name
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
 
       - name: Upload Release Assets
         uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: USALauncher/bin/Release/net8.0/win-x64/publish/*  # Adjust the path if necessary
+          pattern: USALauncher/bin/Release/net8.0/win-x64/publish/*
           release-url: ${{ steps.create_release.outputs.upload_url }}
