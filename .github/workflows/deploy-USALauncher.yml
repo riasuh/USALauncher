@@ -61,7 +61,7 @@ jobs:
         uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: bin/Release/net8.0-windows10.0.22621.0/win-x64/publish/*
+          pattern: bin/Release/net8.0-windows10.0.22621.0/win-x64/publish/USALauncher.exe
           release-url: ${{ steps.create_release.outputs.upload_url }}
 
 
