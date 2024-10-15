@@ -22,8 +22,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: List Directory Contents
-        run: dir USALauncher  # This will show the contents of the USALauncher directory
+      - name: List All Files
+        run: |
+          Get-ChildItem -Recurse -Force
 
       - name: Restore Dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
