@@ -27,7 +27,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Cache NuGet Packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4.1.1
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.sln') }}
@@ -48,7 +48,7 @@ jobs:
       
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Make sure you have this secret set up correctly
         with:
