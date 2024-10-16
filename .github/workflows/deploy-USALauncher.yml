@@ -27,14 +27,13 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Install Windows SDK
-        run: |
-          choco install windows-sdk-10.0
-          refreshenv
+        run: choco install windows-sdk-10.0
 
       - name: Add signtool to PATH
         run: |
           echo "Adding signtool to PATH"
-          echo "::add-path::C:\Program Files (x86)\Windows Kits\10\bin\x64"
+          $env:Path += ";C:\Program Files (x86)\Windows Kits\10\bin\x64"
+          Write-Host "Updated PATH: $env:Path"
 
       - name: Cache NuGet Packages
         uses: actions/cache@v4.1.1
