@@ -75,6 +75,11 @@ jobs:
         env:
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
 
+      - name: Sign Executable
+        run: |
+          echo "Signing executable..."
+          signtool sign /f USALauncherCert.pfx /p "${{ secrets.CERTIFICATE_PASSWORD }}" /fd SHA256 /t http://timestamp.digicert.com "bin/Release/net461/publish/USALauncher.exe"
+
       - name: Create Release and Upload Release Assets
         uses: softprops/action-gh-release@v2.0.8
         with:
