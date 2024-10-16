@@ -48,9 +48,9 @@ jobs:
 
       - name: Import Self-Signed Certificate
         run: |
-          echo $CERTIFICATE_BASE64 | base64 -d > USALauncherCert.pfx
-          $certPassword = ConvertTo-SecureString -String $CERTIFICATE_PASSWORD -Force -AsPlainText
-          Import-PfxCertificate -FilePath .\USALauncherCert.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $certPassword
+            [System.IO.File]::WriteAllBytes("USALauncherCert.pfx", [Convert]::FromBase64String("$env:CERTIFICATE_BASE64"))
+            $certPassword = ConvertTo-SecureString -String $env:CERTIFICATE_PASSWORD -Force -AsPlainText
+            Import-PfxCertificate -FilePath .\USALauncherCert.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $certPassword
         shell: powershell
         env:
           CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_BASE64 }}
