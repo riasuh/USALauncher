@@ -58,7 +58,7 @@ jobs:
           prerelease: false
 
       - name: Upload Release Assets
-        uses: csexton/release-asset-action@v2
+        uses: csexton/release-asset-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pattern: bin/Release/net461/publish/USALauncher.exe
