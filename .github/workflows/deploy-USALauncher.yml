@@ -49,10 +49,12 @@ jobs:
       - name: Code Signing
         uses: skymatic/code-sign-action@v3.0.0
         with:
-          file: "bin/Release/net461/publish/USALauncher.exe"
-          pfx-file: ${{ secrets.CERTIFICATE_BASE64 }}
-          pfx-password: ${{ secrets.CERTIFICATE_PASSWORD }}
-          timestamp-server: "http://timestamp.digicert.com"
+          certificate: ${{ secrets.CERTIFICATE_BASE64 }}
+          password: ${{ secrets.CERTIFICATE_PASSWORD }}
+          folder: "bin/Release/net461/publish"
+          recursive: false
+          timestampUrl: "http://timestamp.digicert.com"
+
 
       - name: Create Release and Upload Release Assets
         uses: softprops/action-gh-release@v2.0.8
