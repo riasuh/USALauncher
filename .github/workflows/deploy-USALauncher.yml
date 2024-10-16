@@ -48,18 +48,32 @@ jobs:
 
       - name: Decode Certificate
         run: |
+          echo "Decoding certificate..."
           powershell -Command "[System.IO.File]::WriteAllBytes('USALauncherCert.pfx', [System.Convert]::FromBase64String('$env:CERTIFICATE_BASE64'))"
         env:
           CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_BASE64 }}
 
+      - name: List Temp Directory
+        run: |
+          echo "Listing Temp Directory..."
+          dir C:\Users\RUNNER~1\AppData\Local\Temp
+
+      - name: Check if PFX File Exists
+        run: |
+          echo "Checking for PFX file..."
+          if (Test-Path 'USALauncherCert.pfx') {
+              Write-Host "PFX file found."
+          } else {
+              Write-Host "PFX file not found."
+              exit 1
+          }
+
       - name: Code Signing
-        uses: skymatic/code-sign-action@v3.0.0
-        with:
-          certificate: ${{ secrets.CERTIFICATE_BASE64 }}
-          password: ${{ secrets.CERTIFICATE_PASSWORD }}
-          certificatesha1: ${{ secrets.CERTIFICATE_SHA1 }}
-          folder: "bin/Release/net461/publish"
-          timestampUrl: "http://timestamp.digicert.com"
+        run: |
+          echo "Starting code signing..."
+          powershell -Command "certutil -f -p '${{ secrets.CERTIFICATE_PASSWORD }}' -importpfx 'USALauncherCert.pfx'"
+        env:
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
 
       - name: Create Release and Upload Release Assets
         uses: softprops/action-gh-release@v2.0.8
