@@ -75,7 +75,7 @@ jobs:
         uses: softprops/action-gh-release@v2.0.8
         with:
           tag_name: ${{ github.ref }}
-          name: ${{ github.ref }}
+          name: ${{ github.ref_name }}
           draft: false
           prerelease: false
           files: bin/Release/net461/publish/USALauncher.exe
