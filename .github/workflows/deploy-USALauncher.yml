@@ -48,7 +48,7 @@ jobs:
 
       - name: Decode Certificate
         run: |
-          echo $CERTIFICATE_BASE64 | powershell -Command "[System.IO.File]::WriteAllBytes('USALauncherCert.pfx', [System.Convert]::FromBase64String((Get-Content -Raw -Encoding UTF8 -Path -)))"
+          powershell -Command "[System.IO.File]::WriteAllBytes('USALauncherCert.pfx', [System.Convert]::FromBase64String('$env:CERTIFICATE_BASE64'))"
         env:
           CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_BASE64 }}
 
