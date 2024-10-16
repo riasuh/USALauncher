@@ -46,8 +46,9 @@ jobs:
       - name: List Published Files
         run: dir bin\Release\net461\publish
 
-      - name: Write Certificate File
-        run: echo $CERTIFICATE_BASE64 | powershell -Command "[System.Convert]::FromBase64String($env:CERTIFICATE_BASE64) | Set-Content -Path 'certificate.pfx' -Encoding Byte"
+      - name: Decode Certificate
+        run: |
+          echo $CERTIFICATE_BASE64 | powershell -Command "[System.IO.File]::WriteAllBytes('USALauncherCert.pfx', [System.Convert]::FromBase64String((Get-Content -Raw -Encoding UTF8 -Path -)))"
         env:
           CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_BASE64 }}
 
