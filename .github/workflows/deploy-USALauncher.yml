@@ -26,15 +26,6 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Install Windows SDK
-        run: choco install windows-sdk-10.0
-
-      - name: Add signtool to PATH
-        run: |
-          echo "Adding signtool to PATH"
-          $env:Path += ";C:\Program Files (x86)\Windows Kits\10\bin\x64"
-          Write-Host "Updated PATH: $env:Path"
-
       - name: Cache NuGet Packages
         uses: actions/cache@v4.1.1
         with:
@@ -73,9 +64,12 @@ jobs:
           }
 
       - name: Code Signing
-        run: |
-          echo "Starting code signing..."
-          signtool sign /f USALauncherCert.pfx /p "${{ secrets.CERTIFICATE_PASSWORD }}" /fd SHA256 /t http://timestamp.digicert.com "bin/Release/net461/publish/USALauncher.exe"
+        uses: dlemstra/code-sign-action@v1
+        with:
+          certificate: ${{ secrets.CERTIFICATE }}  # Ensure this is the Base64-encoded certificate
+          password: ${{ secrets.CERTIFICATE_PASSWORD }}  # Optional: your PFX password
+          files: bin/Release/net461/publish/USALauncher.exe  # Specify the file to sign
+          description: 'Signing USALauncher executable'  # Optional description
 
       - name: Create Release and Upload Release Assets
         uses: softprops/action-gh-release@v2.0.8
