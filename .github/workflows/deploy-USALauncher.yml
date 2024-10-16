@@ -67,7 +67,7 @@ jobs:
         uses: dlemstra/code-sign-action@v1
         with:
           certificate: ${{ secrets.CERTIFICATE_BASE64 }}  # Ensure this is the Base64-encoded certificate
-          password: ${{ secrets.CERTIFICATE_PASSWORD }}  # Optional: your PFX password
+          password: ${{ secrets.CERTIFICATE_PASSWORD }}  # Optional: Your PFX password
           files: bin/Release/net461/publish/USALauncher.exe  # Specify the file to sign
           description: 'Signing USALauncher executable'  # Optional description
 
