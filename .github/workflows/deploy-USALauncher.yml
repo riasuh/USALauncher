@@ -46,6 +46,11 @@ jobs:
       - name: List Published Files
         run: dir bin\Release\net461\publish
 
+      - name: Write Certificate File
+        run: echo $CERTIFICATE_BASE64 | powershell -Command "[System.Convert]::FromBase64String($env:CERTIFICATE_BASE64) | Set-Content -Path 'certificate.pfx' -Encoding Byte"
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_BASE64 }}
+
       - name: Code Signing
         uses: skymatic/code-sign-action@v3.0.0
         with:
