@@ -46,6 +46,24 @@ jobs:
       - name: List Published Files
         run: dir bin\Release\net461\publish
 
+      - name: Import Self-Signed Certificate
+        run: |
+          echo $CERTIFICATE_BASE64 | base64 -d > USALauncherCert.pfx
+          $certPassword = ConvertTo-SecureString -String $CERTIFICATE_PASSWORD -Force -AsPlainText
+          Import-PfxCertificate -FilePath .\USALauncherCert.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $certPassword
+        shell: powershell
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+
+      - name: Sign the Executable
+        run: |
+          $timestampServer = "http://timestamp.digicert.com" # You can change this to another timestamp server if needed
+          & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f USALauncherCert.pfx /p $env:CERTIFICATE_PASSWORD /fd SHA256 /tr $timestampServer /td SHA256 /v "bin\Release\net461\publish\USALauncher.exe"
+        shell: powershell
+        env:
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+
       - name: Create Release and Upload Release Assets
         uses: softprops/action-gh-release@v2.0.8
         with:
@@ -56,5 +74,3 @@ jobs:
           files: bin/Release/net461/publish/USALauncher.exe
         env:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-
