@@ -45,23 +45,16 @@ jobs:
 
       - name: List Published Files
         run: dir bin\Release\net461\publish
-      
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Make sure you have this secret set up correctly
+
+      - name: Create Release and Upload Release Assets
+        uses: softprops/action-gh-release@v2.0.8
         with:
           tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          name: ${{ github.ref }}
           draft: false
           prerelease: false
-
-      - name: Upload Release Assets
-        uses: csexton/release-asset-action@v3
-        with:
+          files: bin/Release/net461/publish/USALauncher.exe
+        env:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: bin/Release/net461/publish/USALauncher.exe
-          release-url: ${{ steps.create_release.outputs.upload_url }}
 
 
