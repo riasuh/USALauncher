@@ -51,10 +51,9 @@ jobs:
         with:
           certificate: ${{ secrets.CERTIFICATE_BASE64 }}
           password: ${{ secrets.CERTIFICATE_PASSWORD }}
+          certificatesha1: ${{ secrets.CERTIFICATE_SHA1 }}
           folder: "bin/Release/net461/publish"
-          recursive: false
           timestampUrl: "http://timestamp.digicert.com"
-
 
       - name: Create Release and Upload Release Assets
         uses: softprops/action-gh-release@v2.0.8
