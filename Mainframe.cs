@@ -567,27 +567,58 @@ public class Mainframe : Form
     {
         cbProfile.Items.Clear();
         lblprofilePath.Text = profilePath;
-        // Überprüfen Sie, ob lblprofilePath.Text leer oder null ist
+
+        // Check if lblprofilePath.Text is empty or null
         if (!string.IsNullOrEmpty(lblprofilePath.Text))
         {
-            string[] directories = Directory.GetDirectories(lblprofilePath.Text);
-
-            foreach (string text in directories)
+            try
             {
-                UserProfile userProfile = new UserProfile(text);
-                cbProfile.Items.Add(userProfile);
-                if (Settings.Default.profile != null && Settings.Default.profile == text)
+                string[] directories = Directory.GetDirectories(lblprofilePath.Text);
+
+                foreach (string text in directories)
                 {
-                    cbProfile.SelectedItem = userProfile;
+                    // Check if the directory still exists
+                    if (Directory.Exists(text))
+                    {
+                        UserProfile userProfile = new UserProfile(text);
+                        cbProfile.Items.Add(userProfile);
+
+                        if (Settings.Default.profile != null && Settings.Default.profile == text)
+                        {
+                            cbProfile.SelectedItem = userProfile;
+                        }
+                    }
+                    else
+                    {
+                        // Handle the case where the directory does not exist
+                        // Optionally, you can log this information or show a message to the user
+                        Console.WriteLine($"The directory '{text}' no longer exists.");
+                    }
                 }
+
+                // If no profiles are added, clear the selection
+                if (cbProfile.Items.Count == 0)
+                {
+                    cbProfile.Text = string.Empty;
+                    MessageBox.Show("No valid profiles could be loaded. Please check the profile directory.",
+                                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any unexpected exceptions during directory access
+                MessageBox.Show($"An error occurred while loading profiles: {ex.Message}",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         else
         {
-            // Behandeln Sie den Fall, wenn der Pfad leer oder null ist
-            MessageBox.Show("Der Profilpfad wurde nicht richtig geladen.\nBitte die Anwendung nochmals starten.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Handle the case when the path is empty or null
+            MessageBox.Show("The profile path was not loaded correctly.\nPlease restart the application.",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
+
 
     private void picReload_Click(object sender2, EventArgs e2)
     {
