@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using USALauncher.Properties;
 using USALauncher.Resources;
@@ -145,7 +146,7 @@ public class Mainframe : Form
         LoadPlayerInformation();
 
     }
-    private async void LoadPlayerInformation()
+    private async Task LoadPlayerInformation()
     {
         // IP-Adresse und Port des Servers
         string serverAddress = "s.usa-life.net:2303";
@@ -774,10 +775,11 @@ public class Mainframe : Form
     {
         Application.Exit();
     }
-    private async void picGetServerInfo_Click(object sender, EventArgs e)
-    {
-        LoadPlayerInformation();
-    }
+private async void picGetServerInfo_Click(object sender, EventArgs e)
+{
+    await LoadPlayerInformation(); // Await the asynchronous method
+}
+
     protected override void Dispose(bool disposing)
     {
         if (disposing && components != null)
