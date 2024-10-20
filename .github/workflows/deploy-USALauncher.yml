@@ -3,7 +3,7 @@ name: "Deploy USALauncher"
 on:
   push:
     tags:
-      - "USALauncher/v*"
+      - "v*"
 
 permissions:
   contents: write
