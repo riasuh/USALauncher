@@ -160,20 +160,25 @@ public class Mainframe : Form
 
                 var information = server.Information;
 
-                // Spielerinformationen in das Label einfügen
-                playersOnlineLabel.Text = $"Spieler online: {information.OnlinePlayers}/{information.MaxPlayers}\n";
+                // Spielerinformationen in das Label einfügen (im UI-Thread)
+                Invoke(new Action(() =>
+                {
+                    playersOnlineLabel.Text = $"Spieler online: {information.OnlinePlayers}/{information.MaxPlayers}\n";
+                }));
             }
         }
         catch (Exception ex)
         {
             // Ausnahme im Log festhalten
             WriteDownToLog(DateTime.Now.ToString("HH:mm:ss") + " - Fehler beim Laden der Serverinformationen (Spieleranzahl kann nicht geladen werden): " + ex.ToString());
-            // Label aktualisieren, um anzuzeigen, dass der Client oder Server offline ist
-            playersOnlineLabel.Text = "Client / Server offline\n";
+
+            // Label aktualisieren, um anzuzeigen, dass der Client oder Server offline ist (im UI-Thread)
+            Invoke(new Action(() =>
+            {
+                playersOnlineLabel.Text = "Client / Server offline\n";
+            }));
         }
     }
-
-
     private void UpdateTimer_Tick(object sender, EventArgs e)
     {
         // Spielerinformationen aktualisieren

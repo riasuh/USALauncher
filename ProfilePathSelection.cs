@@ -73,32 +73,28 @@ public class ProfilePathSelection : Form
 
     private bool isValidProfileDirectory(string directory)
     {
-        if (txtPath.ToString().EndsWith("Arma 3 - Other Profiles"))
-        {
-            txtPath.Text = fbdprofilePath.SelectedPath;
-            return true;
-        }
-        return false;
-    }
-
-    private void btnWeiter_Click(object sender, EventArgs e)
-    {
-        success = true;
-        Settings.Default.profilePath = fbdprofilePath.SelectedPath;
-        Settings.Default.Save();
-        Settings.Default.Reload();
-        Close();
+        // Überprüfen, ob der Pfad mit "Arma 3 - Other Profiles" endet
+        return directory.EndsWith("Arma 3 - Other Profiles", StringComparison.OrdinalIgnoreCase);
     }
 
     private void btnWeiter_Click_1(object sender, EventArgs e)
     {
-        txtPath.ToString();
+        // Überprüfen, ob der gewählte Pfad gültig ist
+        if (!isValidProfileDirectory(txtPath.Text))
+        {
+            // Warnung anzeigen, falls der Pfad ungültig ist
+            MessageBox.Show("Bitte wähle den richtigen Ordner 'Arma 3 - Other Profiles' aus.\nBeispiel: '...\\Documents\\Arma 3 - Other Profiles'", "Ungültiger Ordner", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return; // Beende die Methode, damit die Einstellungen nicht gespeichert werden
+        }
+
+        // Wenn der Pfad gültig ist, speichere die Einstellungen
         success = true;
         Settings.Default.profilePath = fbdprofilePath.SelectedPath;
         Settings.Default.Save();
         Settings.Default.Reload();
         Close();
     }
+
 
     private void btnSelectPath_Click_1(object sender, EventArgs e)
     {
