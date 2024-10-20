@@ -1,4 +1,5 @@
 using SteamQuery;
+using SteamQuery.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -147,23 +148,31 @@ public class Mainframe : Form
     }
     private async void LoadPlayerInformation()
     {
-        // IP-Adresse und Port des Servers
-        string serverAddress = "s.usa-life.net:2303";
-
-        // Verbindung zum Server herstellen und Abfrage durchführen
-        using (var server = new GameServer(serverAddress))
+        try
         {
-            await server.PerformQueryAsync();
+            // IP-Adresse und Port des Servers
+            string serverAddress = "s.usa-life.net:2303";
 
-            var information = server.Information;
+            // Verbindung zum Server herstellen und Abfrage durchführen
+            using (var server = new GameServer(serverAddress))
+            {
+                await server.PerformQueryAsync(SteamQueryA2SQuery.Information);
 
-            // Spielerinformationen in das Label einfügen
-            playersOnlineLabel.Text = $"Spieler online: {information.OnlinePlayers}/{information.MaxPlayers}\n";
+                var information = server.Information;
 
-            // Weitere Informationen anzeigen oder Aktionen ausführen, falls benötigt
-            // ...
+                // Spielerinformationen in das Label einfügen
+                playersOnlineLabel.Text = $"Spieler online: {information.OnlinePlayers}/{information.MaxPlayers}\n";
+            }
+        }
+        catch (Exception ex)
+        {
+            // Ausnahme im Log festhalten
+            WriteDownToLog(DateTime.Now.ToString("HH:mm:ss") + " - Fehler beim Laden der Serverinformationen (Spieleranzahl kann nicht geladen werden): " + ex.ToString());
+            // Label aktualisieren, um anzuzeigen, dass der Client oder Server offline ist
+            playersOnlineLabel.Text = "Client / Server offline\n";
         }
     }
+
 
     private void UpdateTimer_Tick(object sender, EventArgs e)
     {
