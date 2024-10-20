@@ -778,7 +778,7 @@ public class Mainframe : Form
     }
     private void picStatsImage_Click(object sender, EventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://www.battlemetrics.com/servers/arma3") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo("https://www.battlemetrics.com/servers/arma3/27499744") { UseShellExecute = true });
     }
     private void picDiscord_Click(object sender, EventArgs e)
     {
